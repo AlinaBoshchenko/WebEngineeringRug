@@ -23,6 +23,11 @@ class PagesController extends Controller
             'airport_code' => 'LAX',
             'link' => '/airports/LAX'
         ];
+        $airports[] = [
+            'airport_name' => 'Dutch International Airport',
+            'airport_code' => 'DIA',
+            'link' => '/airports/DIA'
+        ];
 
         $json_airports = [];
 
