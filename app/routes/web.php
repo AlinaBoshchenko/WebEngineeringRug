@@ -13,5 +13,15 @@
 
 Route::get('/', 'PagesController@getIndex');
 Route::get('airports', 'PagesController@getAirports');
-Route::get('about', 'PagesController@getAbout');
-Route::get('contact', 'PagesController@getContact');
+Route::get('airport/{airport_code}', 'PagesController@getAirport');
+Route::get('carriers', 'PagesController@getCarriers');
+Route::get('carrier/{carrier_code}', 'PagesController@getCarrier');
+Route::get('airport/{airport_code}/carriers', 'PagesController@getCarriersAtAirport');
+Route::get('carrier/{carrier_code}/statistics/flights', 'PagesController@getCarrierStatistics');
+Route::post('carrier/{carrier_code}/statistics/flights', 'PagesController@postCarrierStatistics');
+Route::delete('carrier/{carrier_code}/statistics/flights', 'PagesController@deleteCarrierStatistics');
+Route::put('carrier/{carrier_code}/statistics/flights', 'PagesController@putCarrierStatistics');
+Route::get('carriers/statistics/minutes_delayed', 'PagesController@getCarriersStatisticsMinutes');
+Route::get('carriers/statistics/delays', 'PagesController@getCarriersStatisticsDelays');
+Route::get('carrier/{carrier_code}/statistics/delays', 'PagesController@getCarrierStatisticsDelays');
+
