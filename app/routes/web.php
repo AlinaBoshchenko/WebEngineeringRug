@@ -12,16 +12,16 @@
 */
 
 Route::get('/', 'PagesController@getIndex');
-Route::get('airports', 'PagesController@getAirports');
-Route::get('airport/{airport_code}', 'PagesController@getAirport');
-Route::get('carriers', 'PagesController@getCarriers');
-Route::get('carrier/{carrier_code}', 'PagesController@getCarrier');
-Route::get('airport/{airport_code}/carriers', 'PagesController@getCarriersAtAirport');
-Route::get('carrier/{carrier_code}/statistics/flights', 'PagesController@getCarrierStatistics');
-Route::post('carrier/{carrier_code}/statistics/flights', 'PagesController@postCarrierStatistics');
-Route::delete('carrier/{carrier_code}/statistics/flights', 'PagesController@deleteCarrierStatistics');
-Route::put('carrier/{carrier_code}/statistics/flights', 'PagesController@putCarrierStatistics');
-Route::get('carriers/statistics/minutes_delayed', 'PagesController@getCarriersStatisticsMinutes');
-Route::get('carriers/statistics/delays', 'PagesController@getCarriersStatisticsDelays');
-Route::get('carrier/{carrier_code}/statistics/delays', 'PagesController@getCarrierStatisticsDelays');
+Route::get('API/airports', 'PagesController@getAirports');
+Route::get('API/airport/{airport_code}', 'PagesController@getAirport');
+Route::get('API/carriers', 'PagesController@getCarriers');
+Route::get('API/carrier/{carrier_code}', 'PagesController@getCarrier');
+Route::get('API/airport/{airport_code}/carriers', 'PagesController@getCarriersAtAirport');
+Route::get('API/carrier/{carrier_code}/statistics/flights', 'PagesController@getCarrierStatistics');
+Route::post('API/carrier/{carrier_code}/statistics/flights', 'PagesController@postCarrierStatistics');
+Route::delete('API/carrier/{carrier_code}/statistics/flights', 'PagesController@deleteCarrierStatistics');
+Route::put('API/carrier/{carrier_code}/statistics/flights', 'PagesController@putCarrierStatistics');
+Route::get('API/carriers/statistics/minutes_delayed', 'PagesController@getCarriersStatisticsMinutes');
+Route::get('API/carriers/statistics/delays', 'PagesController@getCarriersStatisticsDelays');
+Route::get('API/carrier/{carrier_code}/statistics/delays', 'PagesController@getCarrierStatisticsDelays');
 
