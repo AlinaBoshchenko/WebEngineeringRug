@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Statistic extends Model
 {
-    protected $table;
+    protected $table = 'statistics';
 }
