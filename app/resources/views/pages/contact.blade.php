@@ -82,6 +82,7 @@
     <div class="content">
         <div class="title m-b-md">
             Contact me :)
+            <script src = "jQuery.js"></script>
         </div>
 
         <div class="links">

@@ -12,6 +12,8 @@
 */
 
 Route::get('/', 'PagesController@getIndex');
-Route::get('airports', 'PagesController@getAirports');
+Route::get('/API/airports', 'PagesController@getAirports');
+Route::get('/airports', 'PagesController@getAirportsPage');
 Route::get('about', 'PagesController@getAbout');
 Route::get('contact', 'PagesController@getContact');
+Route::get('intro', 'PagesController@getIntro');

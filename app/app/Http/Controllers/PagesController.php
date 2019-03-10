@@ -10,6 +10,16 @@ class PagesController extends Controller
         return view('pages.welcome');
     }
 
+    public function getIntro()
+    {
+        return view('pages.intro');
+    }
+
+    public function getAirportsPage()
+    {
+        return view('pages.airports');
+    }
+
     public function getAirports()
     {
         $airports = [];
