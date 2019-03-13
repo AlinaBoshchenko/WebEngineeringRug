@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
-use function GuzzleHttp\Promise\all;
+use App\Airport;
+use App\Carrier;
+use App\FlightStatistic;
+use App\Statistic;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -25,76 +27,64 @@ class PagesController extends Controller
 
     public function getAirports()
     {
-        $airports = [];
-        $airports[] = [
-            'airport_name' => 'John F. Kennedy International Airport',
-            'airport_code' => 'JFK',
-            'link' => '/airports/JFK'
-        ];
-        $airports[] = [
-            'airport_name' => 'Los Angeles International Airport',
-            'airport_code' => 'LAX',
-            'link' => '/airports/LAX'
-        ];
-        $airports[] = [
-            'airport_name' => 'Dutch International Airport',
-            'airport_code' => 'DIA',
-            'link' => '/airports/DIA'
-        ];
+        $airports = Airport::all();
 
         $json_airports = [];
-
-        foreach ($airports as $airport) {
-            $json_airports[] = json_encode($airport);
+        foreach ($airports->toArray() as $airport) {
+            $json_airports[] =
+                [
+                    'airport_name' => $airport['airport_code'],
+                    'airport_code' => $airport['airport_name'],
+                    'link' => '/airports/' . $airport['airport_code']
+                ];
         }
 
-        return json_encode($airports);
+        return $json_airports;
     }
 
     public function getAirport($airport_code)
     {
-        return json_encode([
-            'airport_name' => 'John F. Kennedy International Airport',
-            'airport_code' => $airport_code
+        $airport = Airport::where('airport_code' , '=' , $airport_code)->first();
+        $airport_as_array = $airport->toArray();
 
-        ]);
+        return  [
+            'airport_name' => $airport_as_array['airport_code'],
+            'airport_code' => $airport_as_array['airport_name'],
+        ];
     }
 
 
     public function getCarriers()
     {
-        $carriers = [];
-        $carriers[] = [
-            'carrier_name' => 'name1',
-            'carrier_code' => 'code1',
-            'link' => 'link1'
-        ];
-        $carriers[] = [
-            'carrier_name' => 'name2',
-            'carrier_code' => 'code2',
-            'link' => 'link2'
-        ];
+        $carriers = Carrier::all();
 
         $json_carriers = [];
-
-        foreach ($carriers as $carrier) {
-            $json_carriers[] = json_encode($carrier);
+        foreach ($carriers->toArray() as $carrier) {
+            $json_carriers[] =
+                [
+                    'carrier_name' => $carrier['carrier_name'],
+                    'carrier_code' => $carrier['carrier_code'],
+                    'link' => '/carrier/' . $carrier['carrier_code']
+                ];
         }
 
-        return json_encode($carriers);
-
+        return $json_carriers;
     }
 
     public function getCarrier($carrier_code)
     {
-        return json_encode([
-            'carrier_name' => 'name',
-            'carrier_code' => $carrier_code
-        ]);
+        $carrier = Carrier::where('carrier_code' , '=' , $carrier_code)->first();
+        $carrier_as_array = $carrier->toArray();
+
+        return  [
+            'carrier_code' => $carrier_as_array['carrier_code'],
+            'carrier_name' => $carrier_as_array['carrier_name'],
+        ];
     }
 
     public function getCarriersAtAirport($airport_code)
     {
+        //TODO not done. need one migration
         $carriers = [];
         $carriers[] = [
             'carrier_name' => 'name1',
@@ -118,19 +108,36 @@ class PagesController extends Controller
 
     public function getCarrierStatistics($carrier_code, Request $request)
     {
-        return json_encode([
+        $statistics = Statistic::where(['carrier_code' => $carrier_code, 'month' => $request['month'], 'year' => $request['year']] , '=')->get();
+        $statistics_as_array = $statistics->toArray();
+
+        $statistic_ids = array_map(
+            function ($statistic_as_array) {
+                return $statistic_as_array['id'];
+            }, $statistics_as_array
+        );
+
+        $flight_statistics = FlightStatistic::whereIn('statistics_id', $statistic_ids)->get();
+        $flight_statistics_as_array = $flight_statistics->toArray();
+
+//        $stats = [];
+//        foreach ($flight_statistics_as_array as $flight_statistic) {
+//            $stats[] = [
+//                'cancelled' => 1,
+//                'on_time' => 2,
+//                'total' => 3,
+//                'delayed' => 4,
+//                'diverted' => 5
+//            ];
+//        }
+
+        return [
             'route' => $request['route'],
             'month' => $request['month'],
             'year' => $request['year'],
-            'statistics' => [
-                'cancelled' => 1,
-                'on time' => 2,
-                'total' => 3,
-                'delayed' => 4,
-                'diverted' => 5
-            ]
+            'statistics' => $flight_statistics_as_array
+        ];
 
-    ]);
     }
 
     public function postCarrierStatistics($carrier_code, Request $request)

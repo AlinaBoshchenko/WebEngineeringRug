@@ -23,7 +23,7 @@ class CreateNumOfDelaysStatisticsTable extends Migration
             $table->integer('carrier');
             $table->timestamps();
 
-            $table->foreign('statistics_id')->references('id')->on('statistics');
+//            $table->foreign('statistics_id')->references('id')->on('statistics');
         });
 
         ini_set('memory_limit', '400M');

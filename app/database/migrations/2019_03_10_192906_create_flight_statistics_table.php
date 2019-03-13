@@ -23,7 +23,7 @@ class CreateFlightStatisticsTable extends Migration
             $table->integer('diverted');
             $table->timestamps();
 
-            $table->foreign('statistics_id')->references('id')->on('statistics');
+//            $table->foreign('statistics_id')->references('id')->on('statistics');
         });
 
         ini_set('memory_limit', '400M');
