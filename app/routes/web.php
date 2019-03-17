@@ -20,7 +20,7 @@ Route::get('API/airports/{airport_code?}', ['as' => 'api_get_airports', 'uses' =
 Route::get('API/carriers/{carrier_code?}', ['as' => 'api_get_carriers', 'uses' => 'CarriersController@get']);
 
 Route::get('API/airport/{airport_code}/carriers', 'PagesController@getCarriersAtAirport');
-Route::get('API/carrier/{carrier_code}/statistics/flights', 'PagesController@getCarrierStatistics');
+Route::get('API/carrier/{carrier_code}/statistics/flights', ['as' => 'api_get_flight_statistics', 'uses' => 'FlightStatisticsController@get']);
 Route::post('API/carrier/{carrier_code}/statistics/flights', ['as' => 'api_post_flight_statistics', 'uses' => 'FlightStatisticsController@post']);
 Route::delete('API/carrier/{carrier_code}/statistics/flights', ['as' => 'api_delete_flight_statistics', 'uses' => 'FlightStatisticsController@delete']);
 Route::put('API/carrier/{carrier_code}/statistics/flights', ['as' => 'api_put_flight_statistics', 'uses' => 'FlightStatisticsController@put']);

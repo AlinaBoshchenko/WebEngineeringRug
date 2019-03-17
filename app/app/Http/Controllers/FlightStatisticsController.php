@@ -12,7 +12,6 @@ use App\FlightStatistic;
 use App\Statistic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\URL;
 
 
 class FlightStatisticsController
@@ -54,6 +53,51 @@ class FlightStatisticsController
         }
     }
 
+
+    public function get(Request $request, $carrier_code)
+    {
+        $airport_code = $request['airport_code'];
+        $year = $request['year'];
+        $month = $request['month'];
+
+        $statistics_id = $this->_getStatistics($carrier_code, $airport_code, $year, $month)['id'];
+
+        if ($statistics_id == null) {
+            return response('no corresponding statistics', Response::HTTP_NOT_FOUND);
+        }
+
+        $flight_statistics = $this->_getFlightStatistics($statistics_id);
+
+        if($flight_statistics == null){
+            return response('no corresponding statistics', Response::HTTP_NOT_FOUND);
+        }
+
+        $content_type_requested = $request->header('Content-Type');
+
+        $response_headers = [
+            'Content-Type' => $content_type_requested ?? 'application/json',
+        ];
+
+        if ($content_type_requested == 'text/csv') {
+            $callback = function () use ($flight_statistics) {
+                $FH = fopen('php://output', 'w');
+                foreach ($flight_statistics as $row) {
+                    fputcsv($FH, $row);
+                }
+                fclose($FH);
+            };
+
+            return response()->stream(
+                $callback, Response::HTTP_OK, $response_headers
+            );
+        } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
+            return response()->json($flight_statistics, Response::HTTP_OK, $response_headers);
+        }
+
+        return response('Content-Type given is not supported.', 400);
+
+
+    }
 
     public function post(Request $request, $carrier_code)
     {
