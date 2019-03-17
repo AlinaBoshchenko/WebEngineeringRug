@@ -27,8 +27,11 @@ class CarriersController extends Controller
         } else {
             $content_body = $this->getCarriersAsArray();
         }
+
         if ($content_body === null) {
             return response('Problem loading from airports database.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        } elseif (empty($content_body)) {
+            return response('Carrier code not found.', Response::HTTP_NOT_FOUND);
         }
 
         $content_type_requested = $request->header('Content-Type');
