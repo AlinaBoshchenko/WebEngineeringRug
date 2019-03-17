@@ -7,6 +7,7 @@ use App\Carrier;
 use App\FlightStatistic;
 use App\Statistic;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PagesController extends Controller
 {
@@ -25,48 +26,9 @@ class PagesController extends Controller
         return view('pages.airports');
     }
 
-    public function getAirports()
-    {
-        $airports = Airport::all();
-
-        $json_airports = [];
-        foreach ($airports->toArray() as $airport) {
-            $json_airports[] =
-                [
-                    'airport_name' => $airport['airport_code'],
-                    'airport_code' => $airport['airport_name'],
-                    'link' => '/airports/' . $airport['airport_code']
-                ];
-        }
-
-        return $json_airports;
-    }
-
     public function getAirport($airport_code)
     {
-        $airport = Airport::where('airport_code' , '=' , $airport_code)->first();
-        $airport_as_array = $airport->toArray();
-
-        return  [
-            'airport_name' => $airport_as_array['airport_code'],
-            'airport_code' => $airport_as_array['airport_name'],
-        ];
     }
-
-    public function getCarriersPage()
-    {
-        return view('pages.carriers');
-    }
-
-    public function getCarrierPage($carrier_code)
-    {
-        $data = [
-            'carrier_code' => $carrier_code
-        ];
-
-        return view('pages.carrier')->withData($data);
-    }
-
 
     public function getCarriers()
     {

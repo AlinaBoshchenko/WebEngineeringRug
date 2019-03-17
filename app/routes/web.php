@@ -12,18 +12,13 @@
 */
 
 Route::get('airports', 'PagesController@getAirportsPage');
-Route::get('airport/{airport_code}/carriers', 'PagesController@getCarriersForAirport');
-Route::get('carriers', 'PagesController@getCarriersPage');
 Route::get('about', 'PagesController@getAbout');
 Route::get('contact', 'PagesController@getContact');
 Route::get('intro', 'PagesController@getIntro');
-Route::get('carrier/{carrier_code}', 'PagesController@getCarrierPage');
 
+Route::get('API/airports/{airport_code?}', ['as' => 'api_get_airports', 'uses' => 'AirportsController@get']);
+Route::get('API/carriers/{carrier_code?}', ['as' => 'api_get_carriers', 'uses' => 'CarriersController@get']);
 
-Route::get('API/airports', 'PagesController@getAirports');//done
-Route::get('API/airport/{airport_code}', 'PagesController@getAirport');
-Route::get('API/carriers', 'PagesController@getCarriers');//done
-Route::get('API/carrier/{carrier_code}', 'PagesController@getCarrier');
 Route::get('API/airport/{airport_code}/carriers', 'PagesController@getCarriersAtAirport');
 Route::get('API/carrier/{carrier_code}/statistics/flights', 'PagesController@getCarrierStatistics');
 Route::post('API/carrier/{carrier_code}/statistics/flights', 'PagesController@postCarrierStatistics');
