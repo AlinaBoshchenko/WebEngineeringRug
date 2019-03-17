@@ -6,13 +6,13 @@
     <style>
         h2 {
             font-size: 1em;
-            font-weight: 300;
+            font-weight: 100%;
             text-align: center;
             display: block;
             line-height: 1em;
             padding-bottom: 2em;
             background-color: #fff;
-            color: #636b6f;
+            color: #ffe9e6;
         }
         h2 {
             display: block;
@@ -21,10 +21,10 @@
         }
         body {
 
-            font-family: 'Open Sans', sans-serif;
-            font-weight: 300;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 100%;
             line-height: 1.42em;
-            color: #A7A1AE;
+            color: #FFFFFF;
 
         }
         button{
@@ -32,7 +32,7 @@
             height: 45px;
             width: 150px;
             text-align: center;
-            background-color: #113049;
+            background-color: #460a20;
             font-size: 15px;
             color: #ffffff;
         }
@@ -41,13 +41,13 @@
             font-size: 15px;
         }
         table {
-            border-collapse: collapse;
+            border-collapse: collapse;;
             width: 100%;
-            font-family: 'Open Sans', sans-serif;
-            font-weight: 300;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 100%;
             line-height: 2em;
-            color: #A7A1AE;
-            background: #1F2739;
+            color: #f7c6c5;
+            background: #A7A1AE;
             padding: 20px;
 
 
@@ -56,11 +56,11 @@
             text-align: center;
             padding: 15px;
             font-size: 20px;
-            color:#A7A1AE;
+            color: #ffffff;
             border: 5px groove #ccc /* Граница между ячейками */
         }
         th {
-            background-color: #1F2739;
+            background-color: #261941;
             color: white;
             font-style: bold;
             font-size: 35px;
@@ -68,6 +68,7 @@
         a {
             color: #FFE8E6;
         } /* link color */
+
 
     </style>
     <script >
@@ -92,7 +93,7 @@
             $("button").click(function(){
                 var number_of_rows = data.length;
                 var k = 0;
-                var table_body = '<table border="1" id="example"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
+                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
                 for(k in data){
 
                         table_body+='<tr>';

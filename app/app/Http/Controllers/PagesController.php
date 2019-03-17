@@ -53,6 +53,20 @@ class PagesController extends Controller
         ];
     }
 
+    public function getCarriersPage()
+    {
+        return view('pages.carriers');
+    }
+
+    public function getCarrierPage($carrier_code)
+    {
+        $data = [
+            'carrier_code' => $carrier_code
+        ];
+
+        return view('pages.carrier')->withData($data);
+    }
+
 
     public function getCarriers()
     {
