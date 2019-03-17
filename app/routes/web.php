@@ -17,6 +17,7 @@ Route::get('contact', 'PagesController@getContact');
 Route::get('intro', 'PagesController@getIntro');
 
 Route::get('API/airports/{airport_code?}', ['as' => 'api_get_airports', 'uses' => 'AirportsController@get']);
+Route::get('API/carriers/{carrier_code?}', ['as' => 'api_get_carriers', 'uses' => 'CarriersController@get']);
 
 Route::get('API/carriers', 'PagesController@getCarriers');
 Route::get('API/carrier/{carrier_code}', 'PagesController@getCarrier');

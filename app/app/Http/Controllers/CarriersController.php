@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Airport;
+use App\carrier;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
 
 /**
- * Handles requests for the 'airports' API endpoint.
+ * Handles requests for the 'carriers' API endpoint.
  */
-class AirportsController extends Controller
+class CarriersController extends Controller
 {
     /**
-     * Returns all the airports in the desired format.
+     * Returns all the carriers in the desired format.
      *
      * @param Request $request Content-Type: 'application/json'|'text/csv'|null
-     * @param string|null $airport_code
+     * @param string|null $carrier_code
      *
      * @return Response
      */
-    public function get(Request $request, $airport_code = null)
+    public function get(Request $request, $carrier_code = null)
     {
-        if (\is_string($airport_code)) {
-            $content_body = $this->getAirportAsArray($airport_code);
+        if (\is_string($carrier_code)) {
+            $content_body = $this->getCarrierAsArray($carrier_code);
         } else {
-            $content_body = $this->getAirportsAsArray();
+            $content_body = $this->getCarriersAsArray();
         }
         if ($content_body === null) {
             return response('Problem loading from airports database.', Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -59,53 +59,53 @@ class AirportsController extends Controller
     /**
      * @return array|null
      */
-    private function getAirportsAsArray()
+    private function getCarriersAsArray()
     {
         try {
-            $airports = Airport::all();
+            $carriers = Carrier::all();
         } catch (\Exception $e){
             return null;
         }
 
-        if (empty($airports)) {
+        if (empty($carriers)) {
             return [];
         }
 
-        $airports_as_array = [];
-        foreach ($airports->toArray() as $airport) {
-            $airports_as_array[] =
+        $carriers_as_array = [];
+        foreach ($carriers->toArray() as $carrier) {
+            $carriers_as_array[] =
                 [
-                    'airport_name' => $airport['airport_code'],
-                    'airport_code' => $airport['airport_name'],
-                    'link' => URL::route('api_get_airports', $airport['airport_code'])
+                    'carrier_name' => $carrier['carrier_code'],
+                    'carrier_code' => $carrier['carrier_name'],
+                    'link' => URL::route('api_get_carriers', $carrier['carrier_code'])
                 ];
         }
 
-        return $airports_as_array;
+        return $carriers_as_array;
     }
 
     /**
-     * @param string $airport_code
+     * @param string $carrier_code
      *
      * @return array|null
      */
-    private function getAirportAsArray(string $airport_code)
+    private function getCarrierAsArray(string $carrier_code)
     {
         try {
-            $airport = Airport::where('airport_code' , '=' , $airport_code)->first();
+            $carrier = Carrier::where('carrier_code' , '=' , $carrier_code)->first();
         } catch (\Exception $e){
             return null;
         }
 
-        if (empty($airport)) {
+        if (empty($carrier)) {
             return [];
         }
 
-        $airport_as_array = $airport->toArray();
+        $carrier_as_array = $carrier->toArray();
 
         return  [
-            'airport_name' => $airport_as_array['airport_code'],
-            'airport_code' => $airport_as_array['airport_name'],
+            'carrier_name' => $carrier_as_array['carrier_code'],
+            'carrier_code' => $carrier_as_array['carrier_name'],
         ];
     }
 }
