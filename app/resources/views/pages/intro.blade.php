@@ -29,7 +29,7 @@
             <a href = "http://localhost:8000/airports" class="w3-button w3-block">Find airports</a>
         </div>
         <div class="w3-col s3">
-            <a href="#plans" class="w3-button w3-block">Find carriers</a>
+            <a href = "http://localhost:8000/carriers" class="w3-button w3-block">Find carriers</a>
         </div>
         <div class="w3-col s3">
             <a href="#about" class="w3-button w3-block">Discover statistics</a>
