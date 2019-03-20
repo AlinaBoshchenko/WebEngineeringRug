@@ -92,7 +92,7 @@ class AirportsController extends Controller
      *
      * @return array|null
      */
-    private function getAirportAsArray(string $airport_code)
+    public function getAirportAsArray(string $airport_code)
     {
         try {
             $airport = Airport::where('airport_code' , '=' , $airport_code)->first();
