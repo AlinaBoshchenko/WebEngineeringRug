@@ -95,10 +95,11 @@ class CarriersController extends Controller
      * Get a carrier with its carrier_code.
      *
      * @param string $carrier_code
+     * @param bool   $include_extras
      *
      * @return array|null
      */
-    private function getCarrierAsArray(string $carrier_code)
+    private function getCarrierAsArray(string $carrier_code, bool $include_extras = false)
     {
         try {
             $carrier = Carrier::where('carrier_code' , '=' , $carrier_code)->first();
@@ -108,6 +109,15 @@ class CarriersController extends Controller
 
         if (empty($carrier)) {
             return [];
+        }
+
+        if ($include_extras) {
+            return \array_merge(
+                $carrier->toArray(),
+                [
+                    'link' => URL::route('api_get_carriers', $carrier->carrier_code)
+                ]
+            );
         }
 
         return $carrier->toArray();

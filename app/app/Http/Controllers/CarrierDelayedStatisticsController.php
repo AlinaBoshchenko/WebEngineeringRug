@@ -53,8 +53,8 @@ class CarrierDelayedStatisticsController extends Controller
         $median = $total_minutes_delayed_per_month[(int) ($stat_size / 2)];
         $std = $this->std_deviation($total_minutes_delayed_per_month);
 
-        $airport_1_as_array = (new AirportsController())->getAirportAsArray($airport_code_1);
-        $airport_2_as_array = (new AirportsController())->getAirportAsArray($airport_code_2);
+        $airport_1_as_array = (new AirportsController())->getAirportAsArray($airport_code_1, true);
+        $airport_2_as_array = (new AirportsController())->getAirportAsArray($airport_code_2, true);
 
         return response()->json(
             [

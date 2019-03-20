@@ -95,10 +95,11 @@ class AirportsController extends Controller
      * Returns a specific airport as an array.
      *
      * @param string $airport_code
+     * @param bool  $include_extras
      *
      * @return array|null
      */
-    public function getAirportAsArray(string $airport_code)
+    public function getAirportAsArray(string $airport_code, bool $include_extras = false)
     {
         try {
             $airport = Airport::where('airport_code' , '=' , $airport_code)->first();
@@ -108,6 +109,15 @@ class AirportsController extends Controller
 
         if (empty($airport)) {
             return [];
+        }
+
+        if ($include_extras) {
+            return \array_merge(
+                $airport->toArray(),
+                [
+                    'link' => URL::route('api_get_airports', $airport['airport_code'])
+                ]
+            );
         }
 
         return $airport->toArray();
