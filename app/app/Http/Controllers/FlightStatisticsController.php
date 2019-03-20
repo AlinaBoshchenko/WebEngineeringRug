@@ -6,31 +6,66 @@ use App\FlightStatistic;
 use App\Statistic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 class FlightStatisticsController
 {
 
-    /***
+    /**
      * @param Request $request
      * @param $carrier_code
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|Response|\Symfony\Component\HttpFoundation\StreamedResponse
+     * @return ResponseFactory|Response|StreamedResponse
      */
     public function get(Request $request, string $carrier_code)
     {
         $airport_code = $request['airport_code'];
         $year = $request['year'];
         $month = $request['month'];
+        $route = $request['route'];
+        $filter = $request['filter'];
 
-        $statistics_id = $this->getStatistics($carrier_code, $airport_code, $year, $month)['id'];
+        if($route==null){
+            return response('Route is not given by user', Response::HTTP_BAD_REQUEST);
+        }
 
-        if ($statistics_id === null) {
+        if($filter == null){
+            $filter = [];
+        }
+
+        if($year == null && $month == null){
+            $statistics_array = $this->getStaticsForAll($carrier_code, $airport_code);
+        } else if($year == null){
+            if(!\is_numeric($month) || $month < 1 ||  $month > 12){
+                return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+            }else{
+                $statistics_array = $this->getStatisticsForAMonth($carrier_code, $airport_code, $month);
+            }
+        }else if($month == null){
+            if(!\is_numeric($year) || $year < 1000 || $year > date('Y')){
+                return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+            }else{
+                $statistics_array = $this->getStatisticsForAYear($carrier_code, $airport_code, $year);
+            }
+        }else if (
+            !\is_numeric($year) ||
+            !\is_numeric($month) ||
+            !\is_string($airport_code) ||
+            !$this->sanitizeDate($month, $year)
+        ) {
+            return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+        } else {
+            $statistics_array = collect([$this->getStatistics($carrier_code, $airport_code, $year, $month)]);
+        }
+
+        if($statistics_array === null){
             return response('Error getting statistics from statistics table', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $flight_statistics = $this->getFlightStatistics($statistics_id);
+        $flight_statistics_array = $this->getFlightStatisticsArray($statistics_array, $filter, $route);
 
-        if ($flight_statistics === null) {
+        if ($flight_statistics_array === null) {
             return response('Error getting flight statistics from flight_statistics table', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -41,9 +76,9 @@ class FlightStatisticsController
         ];
 
         if ($content_type_requested == 'text/csv') {
-            $callback = function () use ($flight_statistics) {
+            $callback = function () use ($flight_statistics_array) {
                 $FH = fopen('php://output', 'w');
-                foreach ($flight_statistics as $row) {
+                foreach ($flight_statistics_array as $row) {
                     fputcsv($FH, $row);
                 }
                 fclose($FH);
@@ -53,7 +88,7 @@ class FlightStatisticsController
                 $callback, Response::HTTP_OK, $response_headers
             );
         } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
-            return response()->json($flight_statistics, Response::HTTP_OK, $response_headers);
+            return response()->json($flight_statistics_array, Response::HTTP_OK, $response_headers);
         }
 
         return response('Content-Type given is not supported.', 400);
@@ -62,7 +97,7 @@ class FlightStatisticsController
     }
 
 
-    /***
+    /**
      * @param Request $request
      * @param string $carrier_code
      * @return \Illuminate\Contracts\Routing\ResponseFactory|Response|int
@@ -73,6 +108,15 @@ class FlightStatisticsController
         $airport_code = $request['airport_code'];
         $year = $request['year'];
         $month = $request['month'];
+
+        if (
+            !\is_numeric($year) ||
+            !\is_numeric($month) ||
+            !\is_string($airport_code) ||
+            !$this->sanitizeDate($month, $year)
+        ) {
+            return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+        }
 
         $statistics = $this->getStatistics($carrier_code, $airport_code, $year, $month);
 
@@ -109,7 +153,7 @@ class FlightStatisticsController
     }
 
 
-    /***
+    /**
      * @param Request $request
      * @param string $carrier_code
      * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
@@ -119,6 +163,15 @@ class FlightStatisticsController
         $airport_code = $request['airport_code'];
         $year = $request['year'];
         $month = $request['month'];
+
+        if (
+            !\is_numeric($year) ||
+            !\is_numeric($month) ||
+            !\is_string($airport_code) ||
+            !$this->sanitizeDate($month, $year)
+        ) {
+            return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+        }
 
         $statistics_id = $this->getStatistics($carrier_code, $airport_code, $year, $month)['id'];
 
@@ -143,7 +196,7 @@ class FlightStatisticsController
     }
 
 
-    /***
+    /**
      * @param Request $request
      * @param string $carrier_code
      * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
@@ -153,6 +206,15 @@ class FlightStatisticsController
         $airport_code = $request['airport_code'];
         $year = $request['year'];
         $month = $request['month'];
+
+        if (
+            !\is_numeric($year) ||
+            !\is_numeric($month) ||
+            !\is_string($airport_code) ||
+            !$this->sanitizeDate($month, $year)
+        ) {
+            return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+        }
 
         $statistics_id = $this->getStatistics($carrier_code, $airport_code, $year, $month)['id'];
 
@@ -199,6 +261,17 @@ class FlightStatisticsController
 
 
     /**
+     * A function to check if an input date is valid.
+     * @param int $month
+     * @param int $year
+     * @return bool
+     */
+    private function sanitizeDate(int $month, int $year){
+        return ($month > 0 && $month < 13 && $year <= date('Y') && $year > 1000);
+    }
+
+
+    /**
      * @param string $carrier_code
      * @param string $airport_code
      * @param int $year
@@ -218,7 +291,101 @@ class FlightStatisticsController
     }
 
 
-    /***
+    /**
+     * @param string $carrier_code
+     * @param string $airport_code
+     * @param int $year
+     * @return array|null
+     */
+    private function getStatisticsForAYear(string $carrier_code, string $airport_code, int $year)
+    {
+        try {
+            $statistics = Statistic::where(['carrier_code' => $carrier_code, 'airport_code' => $airport_code, 'year' => $year], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return $statistics;
+
+    }
+
+    private function getStatisticsForAMonth(string $carrier_code, string $airport_code, int $month)
+    {
+        try{
+            $statistics_array = Statistic::where(['carrier_code' => $carrier_code, 'airport_code' => $airport_code, 'month' => $month], '=')->get();
+        } catch (\Exception $e){
+            return null;
+        }
+
+        return $statistics_array;
+    }
+
+
+    private function getStaticsForAll(string $carrier_code, string $airport_code){
+        try{
+            $statistics_array = Statistic::where(['carrier_code' => $carrier_code, 'airport_code' => $airport_code], '=')->get();
+        } catch (\Exception $e){
+            return null;
+        }
+
+        return $statistics_array;
+    }
+
+    private function getStatisticResult(array $filter, FlightStatistic $flight_statistics){
+        $statistics_result = [];
+        if($filter == []){
+            $statistics_result['cancelled'] = $flight_statistics->cancelled;
+            $statistics_result['delayed'] = $flight_statistics->delayed;
+            $statistics_result['on_time'] = $flight_statistics->on_time;
+            $statistics_result['diverted'] = $flight_statistics->diverted;
+            $flight_statistics['total'] = $flight_statistics->total;
+        }else{
+            if(in_array('cancelled', $filter)){
+                $statistics_result['cancelled'] = $flight_statistics->cancelled;
+            }
+            if(in_array('delayed', $filter)){
+                $statistics_result['delayed'] = $flight_statistics->delayed;
+            }
+            if(in_array('on_time', $filter)){
+                $statistics_result['on_time'] = $flight_statistics->on_time;
+            }
+            if(in_array('diverted', $filter)){
+                $statistics_result['diverted'] = $flight_statistics->diverted;
+            }
+            if(in_array('total', $filter)){
+                $flight_statistics['total'] = $flight_statistics->total;
+            }
+        }
+        return $statistics_result;
+    }
+
+
+    private function getFlightStatisticsArray(Collection $statistics_array, array $filter, string $route){
+
+        $flight_statistics_array = [];
+
+
+        foreach ($statistics_array as $statistic){
+
+            $flight_statistics = $this->getFlightStatistics($statistic->id);
+
+            if($flight_statistics!=null){
+                $flight_statistics_array[] =
+                    [
+                        'route' => $route,
+                        'month' => $statistic->month,
+                        'year' => $statistic->year,
+                        'statistics_result' => $this->getStatisticResult($filter, $flight_statistics)
+                    ];
+            }
+        }
+        return $flight_statistics_array;
+    }
+
+
+
+
+    /**
      * @param string $carrier_code
      * @param string $airport_code
      * @param int $year
@@ -241,7 +408,7 @@ class FlightStatisticsController
         }
     }
 
-    /***
+    /**
      * @param int $statistics_id
      * @return FlightStatistic|\Illuminate\Database\Eloquent\Model|null
      */
@@ -254,5 +421,5 @@ class FlightStatisticsController
             return null;
         }
     }
-
+    
 }
