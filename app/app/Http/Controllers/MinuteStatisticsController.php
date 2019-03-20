@@ -7,16 +7,20 @@ use App\Statistic;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/**
+ * Handles requests for the 'carriers/statistics/minutes_delayed' API endpoint.
+ */
 class MinuteStatisticsController
 {
     /***
      * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|Response|\Symfony\Component\HttpFoundation\StreamedResponse
+     *
+     * @return Response|StreamedResponse
      */
     public function get(Request $request)
     {
-
         $airport_code = $request['airport_code'];
         $year = $request['year'];
         $month = $request['month'];

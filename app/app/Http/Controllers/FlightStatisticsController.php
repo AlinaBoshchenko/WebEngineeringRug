@@ -424,7 +424,7 @@ class FlightStatisticsController
                         'route' => $route,
                         'month' => $statistic->month,
                         'year' => $statistic->year,
-                        'statistics_result' => $this->getStatisticsResult($filter, $flight_statistic)
+                        'statistics' => $this->getStatisticsResult($filter, $flight_statistic)
                     ];
             }
         }
