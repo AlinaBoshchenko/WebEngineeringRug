@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Input;
  */
 class CarrierDelayedStatistics extends Controller
 {
-    public function get(Request $request)
+    public function get(Request $request, $carrier_code = null)
     {
         $airport_code_1 = Input::get('airport_1');
         $airport_code_2 = Input::get('airport_2');
@@ -23,7 +23,7 @@ class CarrierDelayedStatistics extends Controller
         }
 
         try {
-            $statistic_ids = $this->getStatisticIDsForCommonCarrierAirports($airport_code_1, $airport_code_2);
+            $statistic_ids = $this->getStatisticIDsForCommonCarrierAirports($airport_code_1, $airport_code_2, $carrier_code);
         } catch (\Exception $e) {
             return response('Could not find or load statistics for given airport codes.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -80,16 +80,19 @@ class CarrierDelayedStatistics extends Controller
     /**
      * For two given airport_codes, get the statistic IDs when they have common carriers.
      *
-     * @param string $airport_code_1
-     * @param string $airport_code_2
-     *
-     * @throws \Exception When a problem with reading from the database occurs.
+     * @param string      $airport_code_1
+     * @param string      $airport_code_2
+     * @param string|null $carrier_code
      *
      * @return int[]
      */
-    public function getStatisticIDsForCommonCarrierAirports(string $airport_code_1, string $airport_code_2): array
+    public function getStatisticIDsForCommonCarrierAirports(string $airport_code_1, string $airport_code_2, string $carrier_code = null): array
     {
-        $statistics_for_airport_1 = Statistic::where('airport_code', '=', $airport_code_1)->get();
+        if ($carrier_code === null) {
+            $statistics_for_airport_1 = Statistic::where('airport_code', '=', $airport_code_1)->get();
+        } else {
+            $statistics_for_airport_1 = Statistic::where(['airport_code' => $airport_code_1, 'carrier_code' => $carrier_code], '=')->get();
+        }
 
         $carriers = [];
         foreach ($statistics_for_airport_1 as $statistic) {
