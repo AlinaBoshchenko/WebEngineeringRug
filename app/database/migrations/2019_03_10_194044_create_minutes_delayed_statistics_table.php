@@ -23,9 +23,6 @@ class CreateMinutesDelayedStatisticsTable extends Migration
             $table->integer('total');
             $table->integer('national_aviation_system');
             $table->timestamps();
-
-
-//            $table->foreign('statistics_id')->references('id')->on('statistics');
         });
 
         ini_set('memory_limit', '400M');

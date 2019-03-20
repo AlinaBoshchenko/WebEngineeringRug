@@ -99,7 +99,7 @@ class CarriersController extends Controller
      *
      * @return array|null
      */
-    private function getCarrierAsArray(string $carrier_code, bool $include_extras = false)
+    public function getCarrierAsArray(string $carrier_code, bool $include_extras = false)
     {
         try {
             $carrier = Carrier::where('carrier_code' , '=' , $carrier_code)->first();

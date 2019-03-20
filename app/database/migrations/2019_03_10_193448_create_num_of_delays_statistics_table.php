@@ -22,8 +22,6 @@ class CreateNumOfDelaysStatisticsTable extends Migration
             $table->integer('national_aviation_system');
             $table->integer('carrier');
             $table->timestamps();
-
-//            $table->foreign('statistics_id')->references('id')->on('statistics');
         });
 
         ini_set('memory_limit', '400M');

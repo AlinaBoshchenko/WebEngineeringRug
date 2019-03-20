@@ -55,15 +55,17 @@ class CarrierDelayedStatisticsController extends Controller
 
         $airport_1_as_array = (new AirportsController())->getAirportAsArray($airport_code_1, true);
         $airport_2_as_array = (new AirportsController())->getAirportAsArray($airport_code_2, true);
+        $carrier_as_array = $carrier_code ? (new CarriersController())->getCarrierAsArray($carrier_code, true) : null;
 
         return response()->json(
-            [
+            \array_filter([
+                'carrier' => $carrier_as_array,
                 'airport_1' => $airport_1_as_array,
                 'airport_2' => $airport_2_as_array,
                 'mean' => round($mean, 4),
                 'median' => round($median, 4),
                 'standard_deviation' => round($std, 4),
-            ],
+            ]),
             Response::HTTP_OK
         );
     }
