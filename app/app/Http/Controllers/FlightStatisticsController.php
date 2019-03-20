@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\FlightStatistic;
 use App\Statistic;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -30,12 +30,12 @@ class FlightStatisticsController
         $route = $request['route'] ?? null;
         $filter = $request['filter'] ?? null;
 
-        if ($route === null) {
+        if ($route === null || ($route != 'from' && $route != 'to')) {
             return response('Route is not given by user', Response::HTTP_BAD_REQUEST);
         }
 
         if($airport_code === null){
-            return response('Aiport code is not given by user', Response::HTTP_BAD_REQUEST);
+            return response('Airport code is not given by user', Response::HTTP_BAD_REQUEST);
         }
 
         if ($filter === null) {
@@ -86,8 +86,17 @@ class FlightStatisticsController
         if ($content_type_requested == 'text/csv') {
             $callback = function () use ($flight_statistics_array) {
                 $FH = fopen('php://output', 'w');
-                foreach ($flight_statistics_array as $row) {
-                    fputcsv($FH, $row);
+                foreach ($flight_statistics_array as $idx => $row) {
+                    $string = ['route' => $row['route'], 'year' => $row['year'], 'month' => $row['month']];
+                    foreach ($row['statistics'] as $key => $statistic){
+                        $string[$key] = $statistic;
+                    }
+
+                    if ($idx == 0) {
+                        fputcsv($FH, \array_keys($string));
+                    }
+
+                    fputcsv($FH, $string);
                 }
                 fclose($FH);
             };
@@ -124,30 +133,46 @@ class FlightStatisticsController
             !\is_string($airport_code) ||
             !$this->sanitizeDate($month, $year)
         ) {
-            return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+            return response('Invalid dates or airport _code given', Response::HTTP_BAD_REQUEST);
         }
 
-        $statistics = $this->getStatistic($carrier_code, $airport_code, $year, $month) ??
-            $this->createStatistics($carrier_code, $airport_code, $year, $month);
+        $statistic = $this->getStatistic($carrier_code, $airport_code, $year, $month);
 
-        if ($statistics === null) {
+        if ($statistic === null) {
+            $statistic = $this->createStatistics($carrier_code, $airport_code, $year, $month);
+            $added_statistic = true;
+        } else {
+            $added_statistic = false;
+        }
+
+        if ($statistic === null) {
             return response('Error when creating a statistic', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        if ($this->getFlightStatistic($statistics->id) === null) {
+        if ($this->getFlightStatistic($statistic->id) === null) {
+            if ($this->isWrongStatisticsInput($request)) {
+                if ($added_statistic) {
+                    $this->deleteStatistics($statistic->id);
+                }
+                return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+            }
+
             try {
                 FlightStatistic::create(
                     [
-                    'statistics_id' => $statistics->id,
-                    'cancelled' => $request['cancelled'] ?? null,
-                    'on_time' => $request['on_time'] ?? null,
-                    'total' => $request['total'] ?? null,
-                    'delayed' => $request['delayed'] ?? null,
-                    'diverted' => $request['diverted'] ?? null
+                        'statistics_id' => $statistic->id,
+                        'cancelled' => $request['cancelled'] ?? null,
+                        'on_time' => $request['on_time'] ?? null,
+                        'total' => $request['total'] ?? null,
+                        'delayed' => $request['delayed'] ?? null,
+                        'diverted' => $request['diverted'] ?? null
                     ]
                 );
-                return response('Insertion succeeded', Response::HTTP_OK);
+                return response('Insertion succeeded', Response::HTTP_CREATED);
             } catch (\Exception $e) {
+                if($added_statistic){
+                    $this->deleteStatistics($statistic->id);
+                }
                 return response('Unable to create a new flight statistic', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         } else {
@@ -225,6 +250,10 @@ class FlightStatisticsController
             return response('Bad syntax', Response::HTTP_BAD_REQUEST);
         }
 
+        if($this->isNotCompleteStatisticArray($request) || $this->isWrongStatisticsInput($request)){
+            return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+        }
+
         $statistic = $this->getStatistic($carrier_code, $airport_code, $year, $month);
 
         if ($statistic === null) {
@@ -245,6 +274,7 @@ class FlightStatisticsController
                     $statistic->id
                 )->update(['cancelled' => $request['cancelled']]);
             }
+
 
             if ($request['on_time']) {
                 FlightStatistic::where(
@@ -293,7 +323,7 @@ class FlightStatisticsController
      */
     private function sanitizeDate(int $month, int $year)
     {
-        return ($month > 0 && $month < 13 && $year <= date('Y') && $year > 1000);
+        return ($month > 0 && $month < 13 && $year <= date('Y') && $year > 1000 && ($year = date('Y') && $month > date('M')));
     }
 
     /**
@@ -483,4 +513,51 @@ class FlightStatisticsController
             return null;
         }
     }
+
+    /**
+     * @param int $id
+     *
+     * @return bool
+     */
+    private function deleteStatistics(int $id)
+    {
+        try{
+            return (boolean)Statistic::where('id', '=', $id)->delete();
+        }catch (\Exception $e){
+            return false;
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isWrongStatisticsInput(Request $request): bool
+    {
+        return (
+            $request['cancelled'] < 0 ||
+            $request['on_time'] < 0 ||
+            $request['total'] < 0 ||
+            $request['delayed'] < 0 ||
+            $request['diverted'] < 0
+        );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isNotCompleteStatisticArray(Request $request): bool
+    {
+        return (
+            $request['cancelled'] == null ||
+            $request['on_time'] == null ||
+            $request['total'] == null ||
+            $request['delayed'] == null ||
+            $request['diverted'] == null
+        );
+    }
+
 }
