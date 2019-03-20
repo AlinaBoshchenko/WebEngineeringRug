@@ -24,29 +24,33 @@ class FlightStatisticsController
      */
     public function get(Request $request, string $carrier_code)
     {
-        $airport_code = $request['airport_code'];
-        $year = $request['year'];
-        $month = $request['month'];
-        $route = $request['route'];
-        $filter = $request['filter'];
+        $airport_code = $request['airport_code'] ?? null;
+        $year = $request['year'] ?? null;
+        $month = $request['month'] ?? null;
+        $route = $request['route'] ?? null;
+        $filter = $request['filter'] ?? null;
 
-        if ($route == null) {
+        if ($route === null) {
             return response('Route is not given by user', Response::HTTP_BAD_REQUEST);
         }
 
-        if ($filter == null) {
+        if($airport_code === null){
+            return response('Aiport code is not given by user', Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($filter === null) {
             $filter = [];
         }
 
-        if ($year == null && $month == null) {
+        if ($year === null && $month === null) {
             $statistics_collection = $this->getStatisticsForAll($carrier_code, $airport_code);
-        } else if ($year == null) {
+        } else if ($year === null) {
             if (!\is_numeric($month) || $month < 1 || $month > 12) {
                 return response('Bad syntax', Response::HTTP_BAD_REQUEST);
             } else {
                 $statistics_collection = $this->getStatisticsForAMonth($carrier_code, $airport_code, $month);
             }
-        } else if ($month == null) {
+        } else if ($month === null) {
             if (!\is_numeric($year) || $year < 1000 || $year > date('Y')) {
                 return response('Bad syntax', Response::HTTP_BAD_REQUEST);
             } else {
@@ -106,9 +110,13 @@ class FlightStatisticsController
      */
     public function post(Request $request, string $carrier_code)
     {
-        $airport_code = $request['airport_code'];
-        $year = $request['year'];
-        $month = $request['month'];
+        $airport_code = $request['airport_code'] ?? null;
+        $year = $request['year'] ?? null;
+        $month = $request['month'] ?? null;
+
+        if($airport_code === null || $year === null || $month === null){
+            return response('Required input is not given by the user', Response::HTTP_BAD_REQUEST);
+        }
 
         if (
             !\is_numeric($year) ||
@@ -155,9 +163,13 @@ class FlightStatisticsController
      */
     public function delete(Request $request, string $carrier_code)
     {
-        $airport_code = $request['airport_code'];
-        $year = $request['year'];
-        $month = $request['month'];
+        $airport_code = $request['airport_code'] ?? null;
+        $year = $request['year'] ?? null;
+        $month = $request['month'] ?? null;
+
+        if($airport_code === null || $year === null || $month === null){
+            return response('Required input is not given by the user', Response::HTTP_BAD_REQUEST);
+        }
 
         if (
             !\is_numeric($year) ||
@@ -170,7 +182,7 @@ class FlightStatisticsController
 
         $statistic = $this->getStatistic($carrier_code, $airport_code, $year, $month);
 
-        if ($statistic == null) {
+        if ($statistic === null) {
             return response('There is nothing to delete', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -196,9 +208,13 @@ class FlightStatisticsController
      */
     public function put(Request $request, string $carrier_code)
     {
-        $airport_code = $request['airport_code'];
-        $year = $request['year'];
-        $month = $request['month'];
+        $airport_code = $request['airport_code'] ?? null;
+        $year = $request['year'] ?? null;
+        $month = $request['month'] ?? null;
+
+        if($airport_code === null || $year === null || $month === null){
+            return response('Required input is not given by the user', Response::HTTP_BAD_REQUEST);
+        }
 
         if (
             !\is_numeric($year) ||
