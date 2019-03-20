@@ -24,7 +24,6 @@ class NumOfDelaysStatistic extends Model
     public function toArray()
     {
         return [
-            'statistics_id' => $this->statistics_id,
             'late_aircraft' => $this->late_aircraft,
             'weather' => $this->weather,
             'security' => $this->security,

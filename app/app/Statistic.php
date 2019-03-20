@@ -25,7 +25,6 @@ class Statistic extends Model
     public function toArray()
     {
         return [
-            'id' => $this->id,
             'airport_code' => $this->airport_code,
             'carrier_code' => $this->carrier_code,
             'month' => $this->month,

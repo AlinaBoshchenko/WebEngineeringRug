@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-
 class MinuteStatisticsController
 {
     /***

@@ -26,7 +26,6 @@ class FlightStatistic extends Model
     public function toArray()
     {
         return [
-            'statistics_id' => $this->statistics_id,
             'cancelled' => $this->cancelled,
             'on_time' => $this->on_time,
             'total' => $this->total,
