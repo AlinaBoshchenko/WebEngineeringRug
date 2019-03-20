@@ -74,11 +74,17 @@ class FlightStatisticsController
         $year = $request['year'];
         $month = $request['month'];
 
-        $statistics_id = $this->getStatistics($carrier_code, $airport_code, $year, $month)['id'];
+        $statistics = $this->getStatistics($carrier_code, $airport_code, $year, $month);
 
-        if ($statistics_id == null) {
-            $statistics_id = $this->createStatistics($carrier_code, $airport_code, $year, $month)['id'];
+        if ($statistics == null) {
+            $statistics = $this->createStatistics($carrier_code, $airport_code, $year, $month);
         }
+
+        if($statistics === null) {
+            return response('Error when creating a statistics', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $statistics_id = $statistics['id'];
 
         if ($this->getFlightStatistics($statistics_id) == null) {
 
@@ -231,13 +237,13 @@ class FlightStatisticsController
             ]);
             return $statistics;
         } catch (\Exception $e) {
-            return response('unable to create statistics', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return null;
         }
     }
 
     /***
      * @param int $statistics_id
-     * @return FlightStatistic|\Illuminate\Database\Eloquent\Model|object|null
+     * @return FlightStatistic|\Illuminate\Database\Eloquent\Model|null
      */
     private function getFlightStatistics(int $statistics_id)
     {
