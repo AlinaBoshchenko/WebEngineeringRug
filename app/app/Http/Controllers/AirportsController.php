@@ -31,7 +31,7 @@ class AirportsController extends Controller
         if ($content_body === null) {
             return response('Problem loading from airports database.', Response::HTTP_INTERNAL_SERVER_ERROR);
         } elseif (empty($content_body)) {
-            return response('Airport code not found.', Response::HTTP_NOT_FOUND);
+            return response('No airport(s) not found.', Response::HTTP_NOT_FOUND);
         }
 
         $content_type_requested = $request->header('Content-Type');
@@ -44,13 +44,15 @@ class AirportsController extends Controller
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
                 foreach ($content_body as $row) {
-                    fputcsv($FH, $row);
+                    fputcsv($FH, [$row]);
                 }
                 fclose($FH);
             };
 
             return response()->stream(
-                $callback, Response::HTTP_OK, $response_headers
+                $callback,
+                Response::HTTP_OK,
+                $response_headers
             );
         } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
@@ -60,6 +62,8 @@ class AirportsController extends Controller
     }
 
     /**
+     * Gets all airports available as arrays.
+     *
      * @return array|null
      */
     private function getAirportsAsArray()
@@ -75,19 +79,21 @@ class AirportsController extends Controller
         }
 
         $airports_as_array = [];
-        foreach ($airports->toArray() as $airport) {
-            $airports_as_array[] =
+        foreach ($airports as $airport) {
+            $airports_as_array[] = \array_merge(
+                $airport->toArray(),
                 [
-                    'airport_name' => $airport['airport_code'],
-                    'airport_code' => $airport['airport_name'],
                     'link' => URL::route('api_get_airports', $airport['airport_code'])
-                ];
+                ]
+            );
         }
 
         return $airports_as_array;
     }
 
     /**
+     * Returns a specific airport as an array.
+     *
      * @param string $airport_code
      *
      * @return array|null
@@ -104,11 +110,6 @@ class AirportsController extends Controller
             return [];
         }
 
-        $airport_as_array = $airport->toArray();
-
-        return  [
-            'airport_name' => $airport_as_array['airport_code'],
-            'airport_code' => $airport_as_array['airport_name'],
-        ];
+        return $airport->toArray();
     }
 }

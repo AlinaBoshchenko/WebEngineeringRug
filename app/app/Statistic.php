@@ -16,4 +16,20 @@ class Statistic extends Model
     protected $table = 'statistics';
 
     protected $guarded = [];
+
+    /**
+     * Returns an array representation of this model that can be exposed to the outside world.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'airport_code' => $this->airport_code,
+            'carrier_code' => $this->carrier_code,
+            'month' => $this->month,
+            'year' => $this->year,
+        ];
+    }
 }

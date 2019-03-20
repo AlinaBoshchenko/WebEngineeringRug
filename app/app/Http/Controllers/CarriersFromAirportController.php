@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
 
 /**
- * Handles requests for the 'airports' API endpoint.
+ * Handles requests for the 'airports/{airport_code}/carriers' API endpoint.
  */
 class CarriersFromAirportController extends Controller
 {
@@ -24,7 +24,7 @@ class CarriersFromAirportController extends Controller
     public function get(Request $request, $airport_code)
     {
         if (!\is_string($airport_code)) {
-            return response('Problem loading from airports database.', Response::HTTP_BAD_REQUEST);
+            return response('Syntax error', Response::HTTP_BAD_REQUEST);
         }
 
         $content_body = $this->getCarriersFromAirportCode($airport_code);
@@ -49,7 +49,9 @@ class CarriersFromAirportController extends Controller
             };
 
             return response()->stream(
-                $callback, Response::HTTP_OK, $response_headers
+                $callback,
+                Response::HTTP_OK,
+                $response_headers
             );
         } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
@@ -83,12 +85,12 @@ class CarriersFromAirportController extends Controller
                 continue;
             }
 
-            $carriers_as_array[] =
+            $carriers_as_array[] = \array_merge(
+                $carrier->toArray(),
                 [
-                    'carrier_name' => $carrier->carrier_name,
-                    'carrier_code' => $carrier->carrier_code,
-                    'link' => URL::route('api_get_carriers', $carrier->carrier_code),
-                ];
+                    'link' => URL::route('api_get_carriers', $carrier->carrier_code)
+                ]
+            );
         }
 
         return $carriers_as_array;

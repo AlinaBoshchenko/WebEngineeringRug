@@ -15,4 +15,21 @@ use Illuminate\Database\Eloquent\Model;
 class NumOfDelaysStatistic extends Model
 {
     protected $table = 'num_of_delays_statistics';
+
+    /**
+     * Returns an array representation of this model that can be exposed to the outside world.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'statistics_id' => $this->statistics_id,
+            'late_aircraft' => $this->late_aircraft,
+            'weather' => $this->weather,
+            'security' => $this->security,
+            'national_aviation_system' => $this->national_aviation_system,
+            'carrier' => $this->carrier,
+        ];
+    }
 }
