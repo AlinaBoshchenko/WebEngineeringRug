@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: aideng
- * Date: 2019-03-19
- * Time: 20:03
- */
 
 namespace App\Http\Controllers;
 
@@ -17,32 +11,10 @@ use Illuminate\Http\Response;
 
 class MinuteStatisticsController
 {
-
-    private function getStatistics($airport_code, $year, $month){
-
-        try{
-            $statistics = Statistic::where(['airport_code'=>$airport_code, 'month' => $month, 'year' => $year] , '=')->get();
-        } catch (\Exception $e){
-            return null;
-        }
-
-        return $statistics;
-
-    }
-
-
-    private function getMiinutesDelayStatistics($statistics_id){
-
-        try{
-            $minute_delay = MinutesDelayedStatistic::where('statistics_id', '=', $statistics_id)->first();
-            return $minute_delay;
-        } catch (\Exception $e){
-            return null;
-        }
-
-    }
-
-
+    /***
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|Response|\Symfony\Component\HttpFoundation\StreamedResponse
+     */
     public function get(Request $request)
     {
 
@@ -52,23 +24,27 @@ class MinuteStatisticsController
 
         $statistics = $this->getStatistics($airport_code, $year, $month);
 
-        if ($statistics == []) {
-            return response('no statistics', Response::HTTP_NOT_FOUND);
+        if ($statistics === null) {
+            return response('Error getting statistics from table', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if ($statistics === []) {
+            return response('no statistics', Response::HTTP_OK);
         }
 
         $minute_delay_array = [];
 
-        foreach ($statistics as $s){
+        foreach ($statistics as $statistic) {
 
-            $minute_delay = $this->getMiinutesDelayStatistics($s['id']);
+            $minute_delay = $this->getMiinutesDelayStatistics($statistic['id']);
 
 
-            if($minute_delay){
+            if ($minute_delay) {
 
                 $minute_delay_array[] =
                     [
-                        'carrier_code' => $s['carrier_code'],
-                        'carrier_link' => URL::route('api_get_carriers', $s['carrier_code']),
+                        'carrier_code' => $statistic['carrier_code'],
+                        'carrier_link' => URL::route('api_get_carriers', $statistic['carrier_code']),
                         'airport_code' => $airport_code,
                         'year' => $year,
                         'month' => $month,
@@ -79,8 +55,8 @@ class MinuteStatisticsController
             }
         }
 
-        if($minute_delay_array == []){
-            return response('no corresponding statistics', Response::HTTP_NOT_FOUND);
+        if ($minute_delay_array === []) {
+            return response('No corresponding statistics', Response::HTTP_OK);
         }
 
         $content_type_requested = $request->header('Content-Type');
@@ -107,6 +83,41 @@ class MinuteStatisticsController
 
         return response('Content-Type given is not supported.', 400);
 
+    }
+
+
+    /***
+     * @param string $airport_code
+     * @param int $year
+     * @param int $month
+     * @return Statistic[]|\Illuminate\Database\Eloquent\Collection|null
+     */
+    private function getStatistics(string $airport_code, int $year, int $month)
+    {
+
+        try {
+            $statistics = Statistic::where(['airport_code' => $airport_code, 'month' => $month, 'year' => $year], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return $statistics;
+
+    }
+
+    /***
+     * @param int $statistics_id
+     * @return MinutesDelayedStatistic|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    private function getMiinutesDelayStatistics(int $statistics_id)
+    {
+
+        try {
+            $minute_delay = MinutesDelayedStatistic::where('statistics_id', '=', $statistics_id)->first();
+            return $minute_delay;
+        } catch (\Exception $e) {
+            return null;
+        }
 
     }
 }
