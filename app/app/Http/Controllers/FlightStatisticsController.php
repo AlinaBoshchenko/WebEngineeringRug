@@ -155,10 +155,6 @@ class FlightStatisticsController
             return response('Error when creating a statistic', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        if(empty($statistics_collection)) {
-            return response('Statistics not found', Response::HTTP_NOT_FOUND);
-        }
-
         if ($this->getFlightStatistic($statistic->id) === null) {
             if ($this->isWrongStatisticsInput($request)) {
                 if ($added_statistic) {
