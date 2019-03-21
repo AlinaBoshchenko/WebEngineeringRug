@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UserReviewsController extends Controller
 {
-
     /**
      * @param Request $request
      * @param string $user_name
@@ -21,7 +20,7 @@ class UserReviewsController extends Controller
     public function get(Request $request, string $user_name, string $review_id = null)
     {
         if ($review_id) {
-            $content_body = $this->getReviewsWithGivenID($user_name, $review_id);
+            $content_body = $this->getReviewWithGivenID($user_name, $review_id);
         } else {
             $content_body = $this->getReviewsWithGivenUserName($user_name);
         }
@@ -61,7 +60,6 @@ class UserReviewsController extends Controller
         }
     }
 
-
     /**
      * @param Request $request
      * @param string $user_name
@@ -70,7 +68,6 @@ class UserReviewsController extends Controller
      */
     public function post(Request $request, string $user_name)
     {
-
         $review = $request['review'] ?? null;
         $carrier_code_rank_1 = $request['carrier_code_rank_1'] ?? null;
         $carrier_code_rank_2 = $request['carrier_code_rank_2'] ?? null;
@@ -136,13 +133,15 @@ class UserReviewsController extends Controller
     }
 
     /**
-     * @param int $id
-     * @return UserReviews[]|null
+     * @param string $user_name
+     * @param int    $id
+     *
+     * @return UserReviews|null
      */
-    private function getReviewsWithGivenID(string $user_name, int $id){
+    private function getReviewWithGivenID(string $user_name, int $id){
         try{
-            $review = UserReviews::where('id' , '=' , $id)->get();
-            if($review->user_name == $user_name){
+            $review = UserReviews::where('id' , '=' , $id)->first();
+            if($review && $review->user_name == $user_name){
                 return $review;
             }else{
                 return null;
@@ -151,5 +150,4 @@ class UserReviewsController extends Controller
             return null;
         }
     }
-
 }
