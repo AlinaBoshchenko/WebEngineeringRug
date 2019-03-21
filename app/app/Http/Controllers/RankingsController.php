@@ -136,7 +136,7 @@ class RankingsController
             $ratio_of_cancellation_ranking[] = [
                 'rank' => $index+1,
                 'carrier_code' => $result['carrier_code'],
-                'num_of_delays' => $result['ratio_of_cancellation'],
+                'ratio_of_cancellations' => $result['ratio_of_cancellation'],
                 'carrier_link' => URL::route('api_get_carriers', $result['carrier_code'])
             ];
         }
