@@ -71,10 +71,18 @@ class FlightStatisticsController
             return response('Error getting statistics from statistics table', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        if(empty($statistics_collection)) {
+            return response('Statistics not found', Response::HTTP_NOT_FOUND);
+        }
+
         $flight_statistics_array = $this->getFlightStatisticsArray($statistics_collection, $filter, $route);
 
         if ($flight_statistics_array === null) {
             return response('Error getting flight statistics from flight_statistics table', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if(empty($flight_statistics_array)) {
+            return response('Flight statistics not found', Response::HTTP_NOT_FOUND);
         }
 
         $content_type_requested = $request->header('Accept');
@@ -145,6 +153,10 @@ class FlightStatisticsController
 
         if ($statistic === null) {
             return response('Error when creating a statistic', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if(empty($statistics_collection)) {
+            return response('Statistics not found', Response::HTTP_NOT_FOUND);
         }
 
         if ($this->getFlightStatistic($statistic->id) === null) {

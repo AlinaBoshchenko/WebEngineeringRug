@@ -49,7 +49,7 @@ class MinuteStatisticsController
         }
 
         if (empty($statistics)) {
-            return response('No statistics found', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response('No statistics found', Response::HTTP_NOT_FOUND);
         }
 
         $minute_delay_array = [];
@@ -78,7 +78,7 @@ class MinuteStatisticsController
         }
 
         if (empty($minute_delay_array)) {
-            return response('No corresponding statistics', Response::HTTP_OK);
+            return response('No corresponding statistics', Response::HTTP_NOT_FOUND);
         }
 
         $content_type_requested = $request->header('Accept');
