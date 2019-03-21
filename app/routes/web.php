@@ -72,3 +72,8 @@ Route::get('API/carriers/statistics/minutes_delayed', [
     ]
 );
 
+Route::get('API/carriers/rankings/{ranking_type}', [
+        'as' => 'api_get_number_of_delays_ranking',
+        'uses' => 'RankingsController@get'
+    ]
+);
