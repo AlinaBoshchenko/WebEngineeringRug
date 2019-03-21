@@ -90,8 +90,21 @@ class MinuteStatisticsController
         if ($content_type_requested == 'text/csv') {
             $callback = function () use ($minute_delay_array) {
                 $FH = fopen('php://output', 'w');
-                foreach ($minute_delay_array as $row) {
-                    fputcsv($FH, $row);
+
+                foreach ($minute_delay_array as $idx => $row) {
+                    foreach ($row['carrier'] as $key => $carrier){
+                        $string[$key] = $carrier;
+                    }
+                    $string = ['airport_code' => $row['airport_code'], 'year' => $row['year'], 'month' => $row['month']];
+                    foreach ($row['reasons'] as $key => $reasons){
+                        $string[$key] = $reasons;
+                    }
+
+                    if ($idx == 0) {
+                        fputcsv($FH, \array_keys($string));
+                    }
+
+                    fputcsv($FH, $string);
                 }
                 fclose($FH);
             };
