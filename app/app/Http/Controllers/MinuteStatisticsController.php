@@ -24,8 +24,25 @@ class MinuteStatisticsController
         $airport_code = $request['airport_code'];
         $year = $request['year'];
         $month = $request['month'];
+        $reasons = $request['reasons'];
 
-        $statistics = $this->getStatistics($airport_code, $year, $month);
+        if($reasons == null){
+            return response('No reason array is given by the user', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if(!$this->isCorrectInputDate($request)){
+            return response('Bad date given by the user', Response::HTTP_BAD_REQUEST);
+        }
+
+        if($airport_code === null){
+            $statistics = $this->getStatisticsWhenAirportNotGiven($request);
+        } else {
+            if(!\is_string($airport_code)){
+                return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+            }else{
+                $statistics = $this->getStatisticsWhenAirportIsGiven($request);
+            }
+        }
 
         if ($statistics === null) {
             return response('Error getting statistics from table', Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -41,19 +58,24 @@ class MinuteStatisticsController
 
             $minute_delay = $this->getMiinutesDelayStatistics($statistic['id']);
 
-
             if ($minute_delay) {
 
                 $minute_delay_array[] =
                     [
-                        'carrier_code' => $statistic['carrier_code'],
-                        'carrier_link' => URL::route('api_get_carriers', $statistic['carrier_code']),
+                        'carrier' => [
+                            'carrier_code' => $statistic['carrier_code'],
+                            'carrier_link' => URL::route('api_get_carriers', $statistic['carrier_code'])
+                        ],
                         'airport_code' => $airport_code,
                         'year' => $year,
                         'month' => $month,
-                        'late_aircraft' => $minute_delay['late_aircraft'],
-                        'carrier' => $minute_delay['carrier'],
-                        'total' => $minute_delay['total']
+                        'reasons' => \array_filter(
+                            [
+                                'late_aircraft' => \in_array('late_aircraft', $reasons) ? $minute_delay['late_aircraft'] : null,
+                                'carrier' => \in_array('carrier', $reasons) ? $minute_delay['carrier'] : null,
+                                'total' => \in_array('total', $reasons) ? $minute_delay['total'] : null
+                            ]
+                        )
                     ];
             }
         }
@@ -88,29 +110,154 @@ class MinuteStatisticsController
 
     }
 
-
     /***
      * @param string $airport_code
      * @param int $year
      * @param int $month
-     * @return Statistic[]|\Illuminate\Database\Eloquent\Collection|null
+     * @return Statistic[]|null
      */
-    private function getStatistics(string $airport_code, int $year, int $month)
+    private function getStatisticsForGivenAirportYearMonth(string $airport_code, int $year, int $month)
     {
-
         try {
-            $statistics = Statistic::where(['airport_code' => $airport_code, 'month' => $month, 'year' => $year], '=')->get();
+            return Statistic::where(['airport_code' => $airport_code, 'month' => $month, 'year' => $year], '=')->get();
         } catch (\Exception $e) {
             return null;
         }
 
-        return $statistics;
+    }
+
+    /**
+     * @param int $year
+     * @param int $month
+     *
+     * @return Statistic[]|null
+     */
+    private function getStatisticsForGivenYearMonth(int $year, int $month){
+
+        try {
+            return Statistic::where(['month' => $month, 'year' => $year], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param int $year
+     *
+     * @return Statistic[]|null
+     */
+    private function getStatisticsForGiveYear(int $year){
+
+        try {
+            return Statistic::where(['year' => $year], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
 
     }
 
+    /**
+     * @param int $month
+     *
+     * @return Statistic[]|null
+     */
+    private function getStatisticsForGivenMonth(int $month){
+        try {
+            return Statistic::where(['month' => $month], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $airport_code
+     * @param int $year
+     *
+     * @return Statistic[]|null
+     */
+    private function getStatisticsForGivenAirportYear(string $airport_code, int $year){
+        try {
+            return Statistic::where(['airport_code' => $airport_code, 'year' => $year], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $airport_code
+     * @param int $month
+     * @return Statistic[]|null
+     */
+    private function getStatisticsForGivenAirportMonth(string $airport_code, int $month){
+        try {
+            return Statistic::where(['airport_code' => $airport_code, 'month' => $month], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $airport_code
+     *
+     * @return Statistic[]|null
+     */
+    private function getStatisticsForGivenAirport(string $airport_code){
+        try {
+            return Statistic::where(['airport_code' => $airport_code], '=')->get();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Statistic[]|\Illuminate\Database\Eloquent\Collection|null
+     */
+    private function getStatisticsWhenAirportNotGiven(Request $request){
+        if($request['year'] == null && $request['month'] == null){
+            try{
+                return Statistic::all();
+            }catch (\Exception $e){
+                return null;
+            }
+        } else if($request['year'] == null){
+            return $this->getStatisticsForGivenMonth($request['month']);
+        } else if ($request['month'] === null) {
+            return $this->getStatisticsForGiveYear($request['year']);
+        } else {
+            return $this->getStatisticsForGivenYearMonth($request['year'], $request['month']);
+        }
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return Statistic[]|null
+     */
+    private function getStatisticsWhenAirportIsGiven(Request $request){
+
+        $airport_code = $request['airport_code'];
+        $year = $request['year'];
+        $month = $request['month'];
+
+        if ($year === null && $month === null) {
+            return $this->getStatisticsForGivenAirport($airport_code);
+        } else if ($year === null) {
+            return $this->getStatisticsForGivenAirportMonth($airport_code, $month);
+        } else if ($month === null) {
+            return $this->getStatisticsForGivenAirportYear($airport_code, $year);
+        } else {
+            return $this->getStatisticsForGivenAirportYearMonth($airport_code, $year, $month);
+        }
+    }
+
+
     /***
      * @param int $statistics_id
-     * @return MinutesDelayedStatistic|\Illuminate\Database\Eloquent\Model|object|null
+     *
+     * @return MinutesDelayedStatistic|null
      */
     private function getMiinutesDelayStatistics(int $statistics_id)
     {
@@ -122,5 +269,29 @@ class MinuteStatisticsController
             return null;
         }
 
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isCorrectInputDate(Request $request){
+        $year = $request['year'];
+        $month = $request['month'];
+
+        if($year == null && $month == null){
+            return true;
+        } else if($year == null){
+            return !(!\is_numeric($month) || $month < 1 || $month > 12);
+        } else if($month == null){
+            return !(!\is_numeric($year) || $year < 1000 || $year > date('Y')) ;
+        } else{
+            return !(
+                !\is_numeric($year) ||
+                !\is_numeric($month) ||
+                !(new FlightStatisticsController())->sanitizeDate($month, $year)
+            );
+        }
     }
 }

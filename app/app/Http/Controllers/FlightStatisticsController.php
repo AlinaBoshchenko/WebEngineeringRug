@@ -321,7 +321,7 @@ class FlightStatisticsController
      *
      * @return bool
      */
-    private function sanitizeDate(int $month, int $year)
+    public function sanitizeDate(int $month, int $year)
     {
         return ($month > 0 && $month < 13 && $year <= date('Y') && $year > 1000 && ($year = date('Y') && $month > date('M')));
     }
@@ -334,7 +334,7 @@ class FlightStatisticsController
      *
      * @return Statistic|null
      */
-    private function getStatistic(string $carrier_code, string $airport_code, int $year, int $month)
+    public function getStatistic(string $carrier_code, string $airport_code, int $year, int $month)
     {
         try {
             return Statistic::where(
