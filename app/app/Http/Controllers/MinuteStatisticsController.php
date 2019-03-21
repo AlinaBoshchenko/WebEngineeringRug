@@ -92,10 +92,10 @@ class MinuteStatisticsController
                 $FH = fopen('php://output', 'w');
 
                 foreach ($minute_delay_array as $idx => $row) {
+                    $string = ['airport_code' => $row['airport_code'], 'year' => $row['year'], 'month' => $row['month']];
                     foreach ($row['carrier'] as $key => $carrier){
                         $string[$key] = $carrier;
                     }
-                    $string = ['airport_code' => $row['airport_code'], 'year' => $row['year'], 'month' => $row['month']];
                     foreach ($row['reasons'] as $key => $reasons){
                         $string[$key] = $reasons;
                     }
