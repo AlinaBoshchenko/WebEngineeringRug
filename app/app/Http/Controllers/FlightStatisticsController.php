@@ -64,14 +64,14 @@ class FlightStatisticsController
         ) {
             return response('Bad syntax', Response::HTTP_BAD_REQUEST);
         } else {
-            $statistics_collection = collect([$this->getStatistic($carrier_code, $airport_code, $year, $month)]);
+            $statistics_collection = [$this->getStatistic($carrier_code, $airport_code, $year, $month)];
         }
 
         if ($statistics_collection === null) {
             return response('Error getting statistics from statistics table', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        if(empty($statistics_collection)) {
+        if($statistics_collection === [null]) {
             return response('Statistics not found', Response::HTTP_NOT_FOUND);
         }
 
@@ -462,13 +462,13 @@ class FlightStatisticsController
 
 
     /**
-     * @param Collection $statistics_array
+     * @param Statistic[] $statistics_array
      * @param array $filter
      * @param string $route
      *
      * @return array
      */
-    private function getFlightStatisticsArray(Collection $statistics_array, array $filter, string $route)
+    private function getFlightStatisticsArray(array $statistics_array, array $filter, string $route)
     {
         $flight_statistics_array = [];
         foreach ($statistics_array as $statistic) {
