@@ -77,3 +77,21 @@ Route::get('API/carriers/rankings/{ranking_type}', [
         'uses' => 'RankingsController@get'
     ]
 );
+
+Route::post('API/reviews/{user_name}', [
+        'as' => 'api_post_review',
+        'uses' => 'UserReviewsController@post'
+    ]
+);
+
+Route::get('API/reviews/{user_name}', [
+        'as' => 'api_get_reviews',
+        'uses' => 'UserReviewsController@get'
+    ]
+);
+
+Route::get('API/reviews/{user_name}/{review_id}', [
+        'as' => 'api_get_review',
+        'uses' => 'UserReviewsController@get'
+    ]
+);
