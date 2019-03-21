@@ -15,7 +15,7 @@ class AirportsController extends Controller
     /**
      * Returns all the airports in the desired format.
      *
-     * @param Request $request Content-Type: 'application/json'|'text/csv'|null
+     * @param Request
      * @param string|null $airport_code
      *
      * @return Response
@@ -34,7 +34,7 @@ class AirportsController extends Controller
             return response('No airport(s) not found.', Response::HTTP_NOT_FOUND);
         }
 
-        $content_type_requested = $request->header('Content-Type');
+        $content_type_requested = $request->header('Accept');
 
         $response_headers = [
             'Content-Type' => $content_type_requested ?? 'application/json',
@@ -61,7 +61,7 @@ class AirportsController extends Controller
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
         }
 
-        return response('Content-Type given is not supported.', 400);
+        return response('Accept type asked for is not supported.', 400);
     }
 
     /**

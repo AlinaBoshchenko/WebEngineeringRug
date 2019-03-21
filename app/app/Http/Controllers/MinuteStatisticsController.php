@@ -49,7 +49,7 @@ class MinuteStatisticsController
         }
 
         if (empty($statistics)) {
-            return response('No statistics', Response::HTTP_OK);
+            return response('No statistics found', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $minute_delay_array = [];
@@ -81,7 +81,7 @@ class MinuteStatisticsController
             return response('No corresponding statistics', Response::HTTP_OK);
         }
 
-        $content_type_requested = $request->header('Content-Type');
+        $content_type_requested = $request->header('Accept');
 
         $response_headers = [
             'Content-Type' => $content_type_requested ?? 'application/json',
@@ -116,7 +116,7 @@ class MinuteStatisticsController
             return response()->json($minute_delay_array, Response::HTTP_OK, $response_headers);
         }
 
-        return response('Content-Type given is not supported.', 400);
+        return response('Accept type asked for is not supported.', 400);
     }
 
     /***

@@ -52,7 +52,7 @@ class RankingsController
             return response('No ranking found.', Response::HTTP_NOT_FOUND);
         }
 
-        $content_type_requested = $request->header('Content-Type');
+        $content_type_requested = $request->header('Accept');
 
         $response_headers = [
             'Content-Type' => $content_type_requested ?? 'application/json',
@@ -78,7 +78,8 @@ class RankingsController
         } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
         }
-        return response('Content-Type given is not supported.', 400);
+
+        return response('Accept type asked for is not supported.', 400);
     }
 
     /**

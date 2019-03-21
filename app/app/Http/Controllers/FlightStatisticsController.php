@@ -77,7 +77,7 @@ class FlightStatisticsController
             return response('Error getting flight statistics from flight_statistics table', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $content_type_requested = $request->header('Content-Type');
+        $content_type_requested = $request->header('Accept');
 
         $response_headers = [
             'Content-Type' => $content_type_requested ?? 'application/json',
@@ -106,7 +106,7 @@ class FlightStatisticsController
             return response()->json($flight_statistics_array, Response::HTTP_OK, $response_headers);
         }
 
-        return response('Content-Type given is not supported.', 400);
+        return response('Accept type asked for is not supported.', Response::HTTP_BAD_REQUEST);
     }
 
     /**

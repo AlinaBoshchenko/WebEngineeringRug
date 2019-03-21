@@ -66,7 +66,7 @@ class CarrierDelayedStatisticsController extends Controller
             'standard_deviation' => round($std, 4),
         ]);
 
-        $content_type_requested = $request->header('Content-Type');
+        $content_type_requested = $request->header('Accept');
 
         $response_headers = [
             'Content-Type' => $content_type_requested ?? 'application/json',
@@ -99,10 +99,7 @@ class CarrierDelayedStatisticsController extends Controller
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
         }
 
-        return response()->json(
-            $content_body,
-            Response::HTTP_OK
-        );
+        return response('Accept type asked for is not supported.', Response::HTTP_BAD_REQUEST);
     }
 
     /**
