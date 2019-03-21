@@ -21,12 +21,12 @@ class MinuteStatisticsController
      */
     public function get(Request $request)
     {
-        $airport_code = $request['airport_code'];
-        $year = $request['year'];
-        $month = $request['month'];
-        $reasons = $request['reasons'];
+        $airport_code = $request['airport_code'] ?? null;
+        $year = $request['year'] ?? null;
+        $month = $request['month'] ?? null;
+        $reasons = $request['reasons'] ?? null;
 
-        if($reasons == null){
+        if($reasons === null){
             return response('No reason array is given by the user', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
