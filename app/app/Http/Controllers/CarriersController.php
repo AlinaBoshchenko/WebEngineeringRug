@@ -37,7 +37,7 @@ class CarriersController extends Controller
         $content_type_requested = $request->header('Accept');
 
         $response_headers = [
-            'Content-Type' => $content_type_requested ?? 'application/json',
+            'Content-Type' => $content_type_requested == 'text/csv' ? $content_type_requested : 'application/json',
         ];
 
         if ($content_type_requested == 'text/csv') {
@@ -57,11 +57,9 @@ class CarriersController extends Controller
                 Response::HTTP_OK,
                 $response_headers
             );
-        } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
+        } else {
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
         }
-
-        return response('Accept type asked for is not supported.', 400);
     }
 
     /**
