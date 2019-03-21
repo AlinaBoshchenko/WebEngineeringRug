@@ -21,11 +21,11 @@ class CarrierDelayedStatisticsController extends Controller
      */
     public function get(Request $request, $carrier_code = null)
     {
-        $airport_code_1 = Input::get('airport_1') ?? null;
-        $airport_code_2 = Input::get('airport_2') ?? null;
+        $airport_code_1 = Input::get('airport1') ?? null;
+        $airport_code_2 = Input::get('airport2') ?? null;
 
         if ($airport_code_1 === null || $airport_code_2 === null) {
-            return response('Invalid query!', Response::HTTP_BAD_REQUEST);
+            return response('Airport codes not properly given', Response::HTTP_BAD_REQUEST);
         }
 
         try {
@@ -57,15 +57,50 @@ class CarrierDelayedStatisticsController extends Controller
         $airport_2_as_array = (new AirportsController())->getAirportAsArray($airport_code_2, true);
         $carrier_as_array = $carrier_code ? (new CarriersController())->getCarrierAsArray($carrier_code, true) : null;
 
+        $content_body = \array_filter([
+            'carrier' => $carrier_as_array,
+            'airport1' => $airport_1_as_array,
+            'airport2' => $airport_2_as_array,
+            'mean' => round($mean, 4),
+            'median' => round($median, 4),
+            'standard_deviation' => round($std, 4),
+        ]);
+
+        $content_type_requested = $request->header('Content-Type');
+
+        $response_headers = [
+            'Content-Type' => $content_type_requested ?? 'application/json',
+        ];
+
+        //TODO FIX
+        if ($content_type_requested == 'text/csv') {
+            $callback = function () use ($content_body) {
+                $FH = fopen('php://output', 'w');
+                foreach ($content_body as $idx => $row) {
+                    $string = ['mean' => $row['mean'], 'median' => $row['median'], 'standard_deviation' => $row['standard_deviation']];
+                    foreach ($row['airport1'] as $key => $airport1){
+                        $string[$key] = $airport1;
+                    }
+//                    foreach ($row['airport2'] as $key => $airport2){
+//                        $string[$key] = $airport2;
+//                    }
+
+                    if ($idx == 0) {
+                        fputcsv($FH, \array_keys($string));
+                    }
+
+                    fputcsv($FH, $string);
+                }
+                fclose($FH);
+            };
+
+            return response()->stream($callback, Response::HTTP_OK, $response_headers);
+        } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
+            return response()->json($content_body, Response::HTTP_OK, $response_headers);
+        }
+
         return response()->json(
-            \array_filter([
-                'carrier' => $carrier_as_array,
-                'airport_1' => $airport_1_as_array,
-                'airport_2' => $airport_2_as_array,
-                'mean' => round($mean, 4),
-                'median' => round($median, 4),
-                'standard_deviation' => round($std, 4),
-            ]),
+            $content_body,
             Response::HTTP_OK
         );
     }

@@ -44,7 +44,10 @@ class CarriersController extends Controller
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
                 foreach ($content_body as $row) {
-                    fputcsv($FH, [$row]);
+                    if (!\is_array($row)) {
+                        $row = [$row];
+                    }
+                    fputcsv($FH, $row);
                 }
                 fclose($FH);
             };
