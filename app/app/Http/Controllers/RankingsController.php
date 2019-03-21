@@ -62,7 +62,10 @@ class RankingsController
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
                 foreach ($content_body as $row) {
-                    fputcsv($FH, [$row]);
+                    if (!\is_array($row)) {
+                        $row = [$row];
+                    }
+                    fputcsv($FH, $row);
                 }
                 fclose($FH);
             };
@@ -75,9 +78,7 @@ class RankingsController
         } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
         }
-
         return response('Content-Type given is not supported.', 400);
-
     }
 
     /**
