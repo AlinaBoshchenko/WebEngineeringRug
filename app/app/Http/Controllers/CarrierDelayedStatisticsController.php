@@ -76,7 +76,6 @@ class CarrierDelayedStatisticsController extends Controller
             'Content-Type' => $content_type_requested == 'text/csv' ? $content_type_requested : 'application/json',
         ];
 
-        //TODO FIX
         if ($content_type_requested == 'text/csv') {
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
