@@ -1,15 +1,8 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+/**
+ * Views endpoints
+ */
 
 Route::get('airports', 'PagesController@getAirportsPage');
 Route::get('about', 'PagesController@getAbout');
@@ -19,15 +12,90 @@ Route::get('carriers', 'PagesController@getCarriersPage');
 Route::get('carriers/{carrier_code}', 'PagesController@getCarrierPage');
 Route::get('airports/{airport_code}', 'PagesController@getAirportPage');
 
-Route::get('API/airports/{airport_code?}', ['as' => 'api_get_airports', 'uses' => 'AirportsController@get']);
-Route::get('API/carriers/{carrier_code?}', ['as' => 'api_get_carriers', 'uses' => 'CarriersController@get']);
 
+/**
+ * API endpoints
+ */
 
-Route::get('API/airport/{airport_code}/carriers', 'PagesController@getCarriersAtAirport');
-Route::get('API/carrier/{carrier_code}/statistics/flights', 'PagesController@getCarrierStatistics');
-Route::post('API/carrier/{carrier_code}/statistics/flights', 'PagesController@postCarrierStatistics');
-Route::delete('API/carrier/{carrier_code}/statistics/flights', 'PagesController@deleteCarrierStatistics');
-Route::put('API/carrier/{carrier_code}/statistics/flights', 'PagesController@putCarrierStatistics');
-Route::get('API/carriers/statistics/minutes_delayed', 'PagesController@getCarriersStatisticsMinutes');
-Route::get('API/carriers/statistics/delays', 'PagesController@getCarriersStatisticsDelays');
-Route::get('API/carrier/{carrier_code}/statistics/delays', 'PagesController@getCarrierStatisticsDelays');
+Route::get('API/airports/{airport_code?}', [
+        'as' => 'api_get_airports',
+        'uses' => 'AirportsController@get'
+    ]
+);
+
+Route::get('API/carriers/{carrier_code?}', [
+        'as' => 'api_get_carriers',
+        'uses' => 'CarriersController@get']
+);
+
+Route::get('API/airports/{airport_code}/carriers', [
+        'as' => 'carriers_from_airport',
+        'uses' => 'CarriersFromAirportController@get'
+    ]
+);
+
+Route::get('API/carriers/statistics/delays', [
+        'as' => 'api_carrier_delayed_statistics',
+        'uses' => 'CarrierDelayedStatisticsController@get'
+    ]
+);
+
+Route::get('API/carriers/{carrier_code}/statistics/delays', [
+        'as' => 'api_specific_carrier_delayed_statistics',
+        'uses' => 'CarrierDelayedStatisticsController@get'
+    ]
+);
+
+Route::get('API/carriers/{carrier_code}/statistics/flights', [
+        'as' => 'api_get_flight_statistics',
+        'uses' => 'FlightStatisticsController@get'
+    ]
+);
+
+Route::post('API/carriers/{carrier_code}/statistics/flights', [
+        'as' => 'api_post_flight_statistics',
+        'uses' => 'FlightStatisticsController@post'
+    ]
+);
+
+Route::delete('API/carriers/{carrier_code}/statistics/flights', [
+        'as' => 'api_delete_flight_statistics',
+        'uses' => 'FlightStatisticsController@delete'
+    ]
+);
+
+Route::put('API/carriers/{carrier_code}/statistics/flights', [
+        'as' => 'api_put_flight_statistics',
+        'uses' => 'FlightStatisticsController@put'
+    ]
+);
+
+Route::get('API/carriers/statistics/minutes_delayed', [
+        'as' => 'api_get_minute_delay',
+        'uses' => 'MinuteStatisticsController@get'
+    ]
+);
+
+Route::get('API/carriers/rankings/{ranking_type}', [
+        'as' => 'api_get_number_of_delays_ranking',
+        'uses' => 'RankingsController@get'
+    ]
+);
+
+Route::post('API/reviews/{user_name}', [
+        'as' => 'api_post_review',
+        'uses' => 'UserReviewsController@post'
+    ]
+);
+
+Route::get('API/reviews/{user_name}', [
+        'as' => 'api_get_reviews',
+        'uses' => 'UserReviewsController@get'
+    ]
+);
+
+Route::get('API/reviews/{user_name}/{review_id}', [
+        'as' => 'api_get_review',
+        'uses' => 'UserReviewsController@get'
+    ]
+);

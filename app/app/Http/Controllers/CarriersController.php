@@ -15,14 +15,14 @@ class CarriersController extends Controller
     /**
      * Returns all the carriers in the desired format.
      *
-     * @param Request $request Content-Type: 'application/json'|'text/csv'|null
+     * @param Request $request
      * @param string|null $carrier_code
      *
      * @return Response
      */
     public function get(Request $request, $carrier_code = null)
     {
-        if (\is_string($carrier_code)) {
+        if ($carrier_code !== null && \is_string($carrier_code)) {
             $content_body = $this->getCarrierAsArray($carrier_code);
         } else {
             $content_body = $this->getCarriersAsArray();
@@ -34,32 +34,37 @@ class CarriersController extends Controller
             return response('Carrier code not found.', Response::HTTP_NOT_FOUND);
         }
 
-        $content_type_requested = $request->header('Content-Type');
+        $content_type_requested = $request->header('Accept');
 
         $response_headers = [
-            'Content-Type' => $content_type_requested ?? 'application/json',
+            'Content-Type' => $content_type_requested == 'text/csv' ? $content_type_requested : 'application/json',
         ];
 
         if ($content_type_requested == 'text/csv') {
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
                 foreach ($content_body as $row) {
+                    if (!\is_array($row)) {
+                        $row = [$row];
+                    }
                     fputcsv($FH, $row);
                 }
                 fclose($FH);
             };
 
             return response()->stream(
-                $callback, Response::HTTP_OK, $response_headers
+                $callback,
+                Response::HTTP_OK,
+                $response_headers
             );
-        } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
+        } else {
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
         }
-
-        return response('Content-Type given is not supported.', 400);
     }
 
     /**
+     * Get all carriers as arrays.
+     *
      * @return array|null
      */
     private function getCarriersAsArray()
@@ -75,24 +80,27 @@ class CarriersController extends Controller
         }
 
         $carriers_as_array = [];
-        foreach ($carriers->toArray() as $carrier) {
-            $carriers_as_array[] =
+        foreach ($carriers as $carrier) {
+            $carriers_as_array[] = \array_merge(
+                $carrier->toArray(),
                 [
-                    'carrier_name' => $carrier['carrier_code'],
-                    'carrier_code' => $carrier['carrier_name'],
-                    'link' => URL::route('api_get_carriers', $carrier['carrier_code'])
-                ];
+                    'link' => URL::route('api_get_carriers', $carrier->carrier_code)
+                ]
+            );
         }
 
         return $carriers_as_array;
     }
 
     /**
+     * Get a carrier with its carrier_code.
+     *
      * @param string $carrier_code
+     * @param bool   $include_extras
      *
      * @return array|null
      */
-    private function getCarrierAsArray(string $carrier_code)
+    public function getCarrierAsArray(string $carrier_code, bool $include_extras = false)
     {
         try {
             $carrier = Carrier::where('carrier_code' , '=' , $carrier_code)->first();
@@ -104,11 +112,15 @@ class CarriersController extends Controller
             return [];
         }
 
-        $carrier_as_array = $carrier->toArray();
+        if ($include_extras) {
+            return \array_merge(
+                $carrier->toArray(),
+                [
+                    'link' => URL::route('api_get_carriers', $carrier->carrier_code)
+                ]
+            );
+        }
 
-        return  [
-            'carrier_name' => $carrier_as_array['carrier_code'],
-            'carrier_code' => $carrier_as_array['carrier_name'],
-        ];
+        return $carrier->toArray();
     }
 }

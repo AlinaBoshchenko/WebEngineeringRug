@@ -15,7 +15,7 @@ class AirportsController extends Controller
     /**
      * Returns all the airports in the desired format.
      *
-     * @param Request $request Content-Type: 'application/json'|'text/csv'|null
+     * @param Request
      * @param string|null $airport_code
      *
      * @return Response
@@ -31,35 +31,40 @@ class AirportsController extends Controller
         if ($content_body === null) {
             return response('Problem loading from airports database.', Response::HTTP_INTERNAL_SERVER_ERROR);
         } elseif (empty($content_body)) {
-            return response('Airport code not found.', Response::HTTP_NOT_FOUND);
+            return response('No airport(s) not found.', Response::HTTP_NOT_FOUND);
         }
 
-        $content_type_requested = $request->header('Content-Type');
+        $content_type_requested = $request->header('Accept');
 
         $response_headers = [
-            'Content-Type' => $content_type_requested ?? 'application/json',
+            'Content-Type' => $content_type_requested == 'text/csv' ? $content_type_requested : 'application/json',
         ];
 
         if ($content_type_requested == 'text/csv') {
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
                 foreach ($content_body as $row) {
+                    if (!\is_array($row)) {
+                        $row = [$row];
+                    }
                     fputcsv($FH, $row);
                 }
                 fclose($FH);
             };
 
             return response()->stream(
-                $callback, Response::HTTP_OK, $response_headers
+                $callback,
+                Response::HTTP_OK,
+                $response_headers
             );
-        } elseif ($content_type_requested == 'application/json' || $content_type_requested == null) {
+        } else {
             return response()->json($content_body, Response::HTTP_OK, $response_headers);
         }
-
-        return response('Content-Type given is not supported.', 400);
     }
 
     /**
+     * Gets all airports available as arrays.
+     *
      * @return array|null
      */
     private function getAirportsAsArray()
@@ -75,24 +80,27 @@ class AirportsController extends Controller
         }
 
         $airports_as_array = [];
-        foreach ($airports->toArray() as $airport) {
-            $airports_as_array[] =
+        foreach ($airports as $airport) {
+            $airports_as_array[] = \array_merge(
+                $airport->toArray(),
                 [
-                    'airport_name' => $airport['airport_code'],
-                    'airport_code' => $airport['airport_name'],
                     'link' => URL::route('api_get_airports', $airport['airport_code'])
-                ];
+                ]
+            );
         }
 
         return $airports_as_array;
     }
 
     /**
+     * Returns a specific airport as an array.
+     *
      * @param string $airport_code
+     * @param bool  $include_extras
      *
      * @return array|null
      */
-    private function getAirportAsArray(string $airport_code)
+    public function getAirportAsArray(string $airport_code, bool $include_extras = false)
     {
         try {
             $airport = Airport::where('airport_code' , '=' , $airport_code)->first();
@@ -104,11 +112,15 @@ class AirportsController extends Controller
             return [];
         }
 
-        $airport_as_array = $airport->toArray();
+        if ($include_extras) {
+            return \array_merge(
+                $airport->toArray(),
+                [
+                    'link' => URL::route('api_get_airports', $airport['airport_code'])
+                ]
+            );
+        }
 
-        return  [
-            'airport_name' => $airport_as_array['airport_code'],
-            'airport_code' => $airport_as_array['airport_name'],
-        ];
+        return $airport->toArray();
     }
 }
