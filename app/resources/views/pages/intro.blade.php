@@ -32,10 +32,10 @@
             <a href = "http://localhost:8000/carriers" class="w3-button w3-block">Find carriers</a>
         </div>
         <div class="w3-col s3">
-            <a href="#about" class="w3-button w3-block">Discover statistics</a>
+            <a href = "http://localhost:8000/statistics" class="w3-button w3-block">Discover statistics</a>
         </div>
         <div class="w3-col s3">
-            <a href="contact" class="w3-button w3-block">Discover statistics in minutes</a>
+            <a href = "http://localhost:8000/statistics/carrier" class="w3-button w3-block">Discover statistics for carrier</a>
         </div>
     </div>
 </div>
@@ -103,8 +103,8 @@
         </div>
 
         <div class="w3-col l3 m6 w3-dark-grey w3-container w3-padding-16">
-            <h3><a href = "http://localhost:8000/statistics">Statistics in numbers</h3>
-            <p>Get statistics about flights of a carrier</p>
+            <h3><a href = "http://localhost:8000/statistics">Statistics</a></h3>
+            <p>Get statistics about flights between two airports</p>
         </div>
         <div class="w3-col l3 m6 w3-black w3-container w3-padding-16">
             <h3>Statistics in minutes</h3>

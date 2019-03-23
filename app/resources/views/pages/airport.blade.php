@@ -166,7 +166,7 @@
 <body background="../images/air.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <button>Show airport</button>
-    <div id="tableDiv" style="margin-top: 40px>
+    <div id="tableDiv" style="margin-top: 40px">
         Table will be generated here.
     </div>
 

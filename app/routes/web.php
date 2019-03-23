@@ -11,6 +11,10 @@ Route::get('intro', 'PagesController@getIntro');
 Route::get('carriers', 'PagesController@getCarriersPage');
 Route::get('carriers/{carrier_code}', 'PagesController@getCarrierPage');
 Route::get('airports/{airport_code}', 'PagesController@getAirportPage');
+Route::get('carriers/statistics/delays', 'PagesController@getDelaysPage');
+Route::get('/statistics', 'PagesController@getStatPage');
+Route::get('/statistics/carrier', 'PagesController@getStatCarPage');
+Route::get('/carriers/{carrier_code}/statistics/delays', 'PagesController@getDelaysCarPage');
 
 
 /**

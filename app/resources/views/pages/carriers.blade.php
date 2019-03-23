@@ -103,7 +103,7 @@
                     table_body +='<td>';
                     table_body +=data[k]["carrier_name"] + '</br>';
                     console.log(data[k]["carrier_name"]);
-                    table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_name"] + '">view details</a>';
+                    table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_code"] + '">view details</a>';
                     table_body +='</td>';
 
                     table_body +='<td>';
@@ -136,8 +136,8 @@
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <button>Create Table</button>
     <input type="text" id="search" placeholder="Search data here....."></input>
-    <div id="tableDiv" style="margin-top: 40px>
-        Table will be generated here.
+    <div id="tableDiv" style="margin-top: 40px">
+
     </div>
 </div>
 <p id="p1"></p>
