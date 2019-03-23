@@ -21,11 +21,11 @@
         }
         body {
 
+            background-size: 100%;
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
             line-height: 1.42em;
             color: #FFFFFF;
-            background-size: 100%;
 
         }
         button{
@@ -33,7 +33,7 @@
             height: 45px;
             width: 150px;
             text-align: center;
-            background-color: #460a20;
+            background-color: #1f2646;
             font-size: 15px;
             color: #ffffff;
         }
@@ -42,13 +42,13 @@
             font-size: 15px;
         }
         table {
-            border-collapse: collapse;
-            width: 100%;
+            border-collapse: collapse;;
+            width: 200%;
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
             line-height: 2em;
             color: #f7c6c5;
-            background: #A7A1AE;
+            background: #ae787b;
             padding: 20px;
 
 
@@ -61,7 +61,7 @@
             border: 5px groove #ccc /* Граница между ячейками */
         }
         th {
-            background-color: #261941;
+            background-color: #4b3132;
             color: white;
             font-style: bold;
             font-size: 35px;
@@ -77,65 +77,99 @@
 
         var showData = new XMLHttpRequest();
         var data;
-        console.log("hiii");
-        showData.open('GET', 'http://localhost:8000/API/airports',true);
+        {{--       console.log("{{$data["carrier_code"]}}");--}}
+        {{--showData.open('GET', 'http://localhost:8000/API/carrier/{{$data["carrier_code"]}}',true);--}}
+        showData.open('GET', '{{URL::route('api_get_airports', $data['airport_code'])}}',true);
 
         showData.onload = function(){
-            console.log("hello");
+            // console.log("hello");
 
             data = JSON.parse(this.response);
             console.log(data);
+
         }
         showData.send();
+
+        var showData2 = new XMLHttpRequest();
+        var data2;
+        {{--       console.log("{{$data["carrier_code"]}}");--}}
+        {{--showData.open('GET', 'http://localhost:8000/API/carrier/{{$data["carrier_code"]}}',true);--}}
+        showData2.open('GET', 'http://localhost:8000/API/airport/ {{$data["airport_code"]}}/carriers',true);
+
+
+        showData2.onload = function(){
+            // console.log("hello");
+
+            data2 = JSON.parse(this.response);
+            console.log(data2);
+
+        }
+        showData2.send();
+
+
+
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         $(document).ready(function(){
             $("button").click(function(){
-                var number_of_rows = data.length;
-                var k = 0;
+
+
                 var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
-                for(k in data){
-
-                        table_body+='<tr>';
-                        table_body +='<td>';
-                        table_body +=data[k]["airport_name"] + '</br>';
-                        table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_name"] + '">view details</a>';
-                        table_body +='</td>';
-
-                        table_body +='<td>';
-                        table_body +=data[k]["airport_code"];
-                        table_body +='</td>';
 
 
-                        table_body+='</tr>';
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body += data["airport_name"];
+                table_body +='</td>';
+
+                table_body +='<td>';
+                table_body +=data["airport_code"];
+                table_body +='</td>';
+
+
+                table_body+='</tr>';
+                table_body+='</tbody></table>';
+
+                table_body += '<table width="100%"><thead><tr><th colspan="2">Carriers</th></tr></thead><tbody>';
+
+                var k =0;
+                for(k in data2){
+
+                    table_body+='<tr>';
+                    table_body +='<td>';
+                    table_body +=data2[k]["carrier_name"] + '</br>';
+                    table_body += '<a href="http://localhost:8000/carriers/' + data2[k]["carrier_name"] + '">view details</a>';
+                    table_body +='</td>';
+
+                    table_body +='<td>';
+                    table_body +=data2[k]["carrier_code"];
+                    table_body +='</td>';
+
+
+                    table_body+='</tr>';
 
                 }
                 table_body+='</tbody></table>';
+
+
                 $('#tableDiv').html(table_body);
+
+
                 //display data..........
             });
 
-// for search function.................................. only............................
-            $("#search").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("table tr").filter(function(index) {
-                    if(index>0){
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    }
-                });
-            });
 
         });
     </script>
 </head>
-<body background="images/intro1.jpg" style="width: 1000px">
+<body background="../images/air.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Create Table</button>
-    <input type="text" id="search" placeholder="Search data here....."></input>
+    <button>Show airport</button>
     <div id="tableDiv" style="margin-top: 40px>
         Table will be generated here.
     </div>
+
 </div>
 <p id="p1"></p>
 </body>

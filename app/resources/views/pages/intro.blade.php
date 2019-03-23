@@ -98,7 +98,7 @@
         </div>
 
         <div class="w3-col l3 m6 w3-grey w3-container w3-padding-16">
-            <h3><a href = "http://localhost:8000/carriers">Carriers</h3>
+            <h3><a href = "http://localhost:8000/carriers">Carriers</a></h3>
             <p>Planning a trip? Have a look at the carriers' list</p>
         </div>
 

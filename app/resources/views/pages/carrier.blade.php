@@ -21,6 +21,7 @@
         }
         body {
 
+            background-size: 100%;
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
             line-height: 1.42em;
@@ -42,7 +43,7 @@
         }
         table {
             border-collapse: collapse;;
-            width: 300%;
+            width: 200%;
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
             line-height: 2em;
@@ -77,7 +78,8 @@
         var showData = new XMLHttpRequest();
         var data;
 {{--       console.log("{{$data["carrier_code"]}}");--}}
-        showData.open('GET', 'http://localhost:8000/API/carrier/{{$data["carrier_code"]}}',true);
+        {{--showData.open('GET', 'http://localhost:8000/API/carrier/{{$data["carrier_code"]}}',true);--}}
+        showData.open('GET', '{{URL::route('api_get_carriers', $data['carrier_code'])}}',true);
 
         showData.onload = function(){
            // console.log("hello");
@@ -120,7 +122,7 @@
         });
     </script>
 </head>
-<body background="images/g.jpg" style="width: 1000px">
+<body background="../images/carrier.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <button>Show carrier</button>
     <div id="tableDiv" style="margin-top: 40px>

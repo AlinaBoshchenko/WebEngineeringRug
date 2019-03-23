@@ -26,26 +26,44 @@ class PagesController extends Controller
         return view('pages.airports');
     }
 
+    public function getAirportPage($airport_code)
+    {
+        $data = [
+            'airport_code' => $airport_code
+        ];
+        $data2 = [
+            'airport_code' => $airport_code
+        ];
+
+        return view('pages.airport')->withData($data, $data2);
+    }
+
+    public function getCarriersPage()
+    {
+        return view('pages.carriers');
+    }
+
+
+    public function getCarrierPage($carrier_code)
+    {
+        $data = [
+            'carrier_code' => $carrier_code
+        ];
+
+        return view('pages.carrier')->withData($data);
+    }
+
     public function getAirport($airport_code)
     {
+        $airport = Airport::where('airport_code' , '=' , $airport_code)->first();
+        $airport_as_array = $airport->toArray();
+
+        return  [
+            'airport_code' => $airport_as_array['airport_code'],
+            'airport_name' => $airport_as_array['airport_name'],
+        ];
     }
 
-    public function getCarriers()
-    {
-        $carriers = Carrier::all();
-
-        $json_carriers = [];
-        foreach ($carriers->toArray() as $carrier) {
-            $json_carriers[] =
-                [
-                    'carrier_name' => $carrier['carrier_name'],
-                    'carrier_code' => $carrier['carrier_code'],
-                    'link' => '/carrier/' . $carrier['carrier_code']
-                ];
-        }
-
-        return $json_carriers;
-    }
 
     public function getCarrier($carrier_code)
     {
@@ -71,6 +89,12 @@ class PagesController extends Controller
             'carrier_name' => 'name2',
             'carrier_code' => 'code2',
             'link' => 'link2'
+        ];
+        $carriers[] = [
+            'carrier_name' => 'name3',
+            'carrier_code' => 'code3',
+            'link' => 'link3
+            '
         ];
 
         $json_carriers = [];
