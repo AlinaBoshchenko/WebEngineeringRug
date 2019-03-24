@@ -50,7 +50,7 @@
             font-weight: 100%;
             line-height: 2em;
             color: #f7c6c5;
-            background: #8c8f88;
+            background: #7b786f;
             padding: 20px;
 
 
@@ -63,7 +63,7 @@
             border: 5px groove #ccc /* Граница между ячейками */
         }
         th {
-            background-color: #6ccfab;
+            background-color: #906619;
             color: white;
             font-style: bold;
             font-size: 35px;
@@ -81,49 +81,53 @@
         var data;
 
         console.log("hiii");
-        showData.open('GET',"{!!  URL::route('api_specific_carrier_delayed_statistics', ['carrier_code'=>$data['carrier_code'],'airport1' =>$data['airport1'], 'airport2' => $data['airport2']]) !!} ");
+        showData.open('GET',"{!!  URL::route('api_get_minute_delay', ['airport_code'=>$data['airport_code'],'month' =>$data['month'], 'year' => $data['year'], 'reasons' => $data['reasons']]) !!} ");
 
         showData.onload = function(){
             console.log("hello");
 
             data = JSON.parse(this.response);
             console.log(data);
-        }
+        };
         showData.send();
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         $(document).ready(function(){
             $("button").click(function(){
-                var number_of_rows = data.length;
                 var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Airport1</th><th>Airport2</th><th>Mean</th><th>Median</th><th>Standard deviation</th></tr></thead><tbody>';
+                var table_body = '<table width="100%"><thead><tr><th>Carrier code</th><th>Airport</th><th>Date</th><th>Late aircraft</th><th>Carrier</th><th>Total</th></tr></thead><tbody>';
+                for(k in data){
 
+                    table_body+='<tr>';
+                    table_body +='<td>';
+                    table_body +=data[k]["carrier"]["carrier_code"] + '</br>';
+                    table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier"]["carrier_code"] + '">view details</a>';
+                    table_body +='</td>';
 
-                table_body+='<tr>';
+                    table_body +='<td>';
+                    table_body +=data[k]["airport_code"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["airport1"]["airport_name"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data[k]["month"] + ' / ' + data[k]["year"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["airport2"]["airport_name"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data[k]["reasons"]["late_aircraft"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["mean"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data[k]["reasons"]["carrier"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["median"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data[k]["reasons"]["total"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["standard_deviation"];
-                table_body +='</td>';
-                table_body+='</tr>';
+                    table_body+='</tr>';
 
-
+                }
                 table_body+='</tbody></table>';
                 $('#tableDiv').html(table_body);
                 //display data..........
@@ -143,7 +147,7 @@
     </script>
 </head>
 
-<body background="/images/map1.png">
+<body background="/images/map2.jpg">
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <button>Show statistics</button>

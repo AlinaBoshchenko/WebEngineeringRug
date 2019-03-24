@@ -93,4 +93,55 @@ class PagesController extends Controller
 
         return view('pages.statForCar')->withData($data);
     }
+
+    public function getFlightsStatPage(Request $request)
+    {
+
+        $carrier_code = $request['carrier_code'];
+        $route = $request['route'];
+        $month = $request['month'];
+        $year = $request['year'];
+        $airport_code = $request['airport_code'];
+
+        $data = [
+
+            'carrier_code' => $carrier_code,
+            'route' => $route,
+            'month' => $month,
+            'year' => $year,
+            'airport_code' => $airport_code
+        ];
+
+        return view('pages.flightStat')->withData($data);
+    }
+
+    public function getStatisticsFlightsPage()
+    {
+        return view('pages.statisticsFlights');
+    }
+
+    public function getStatisticsMinPage()
+    {
+        return view('pages.statisticsMin');
+    }
+
+    public function getStatMinPage(Request $request)
+    {
+
+        $airport_code = $request['airport_code'];
+        $month = $request['month'];
+        $year = $request['year'];
+        $reasons = $request['reasons'];
+
+        $data = [
+
+            'airport_code' => $airport_code,
+            'month' => $month,
+            'year' => $year,
+            'reasons' => $reasons
+        ];
+
+        return view('pages.statMin')->withData($data);
+    }
+
 }

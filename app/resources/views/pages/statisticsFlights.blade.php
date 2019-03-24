@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,7 @@
 
         }
         .form-style-6 h1{
-            background: #a8802a;
+            background: #6b63d1;
             padding: 20px 0;
             font-size: 140%;
             font-weight: 300;
@@ -62,9 +63,9 @@
         .form-style-6 textarea:focus,
         .form-style-6 select:focus
         {
-            box-shadow: 0 0 5px #d1c544;
+            box-shadow: 0 0 5px #8469d1;
             padding: 3%;
-            border: 1px solid #d1c433;
+            border: 1px solid #7563d1;
 
         }
 
@@ -75,8 +76,8 @@
             -moz-box-sizing: border-box;
             width: 100%;
             padding: 3%;
-            background: #9c7119;
-            border-bottom: 2px solid #c2ae45;
+            background: #7b69d1;
+            border-bottom: 2px solid #392ac2;
             border-top-style: none;
             border-right-style: none;
             border-left-style: none;
@@ -85,7 +86,7 @@
         }
         .form-style-6 input[type="submit"]:hover,
         .form-style-6 input[type="button"]:hover{
-            background: #bc9953;
+            background: #5a45bc;
 
         }
         body{
@@ -95,22 +96,20 @@
     </style>
 </head>
 
-<body background="../images/map2.jpg">
+<body background="../images/airstat.jpg">
 <div></div>
 <div class="form-style-6">
-    <h1>Find statistics in minutes</h1>
-    <form method="GET" action="http://localhost:8000/carriers/statistics/minutes_delayed">
+    <h1>Find statistics for carrier</h1>
+    <form method="GET" action="http://localhost:8000/carriers/{carrier_code}/statistics/flights">
 
+        <input type="text" name="carrier_code" placeholder="Carrier code" />
 
-        <input type="text" name="airport_code" placeholder="Airport" />
         <input type="text" name="month" placeholder="Month" />
         <input type="text" name="year" placeholder="Year" />
+        <input type="text" name="airport_code" placeholder="Airport" />
 
-        <p>Pick reason:</p>
-        <input type="checkbox" name="reasons[]" value="late_aircraft"> Late aircraft
-        <input type="checkbox" name="reasons[]" value="carrier" checked> Carrier
-        <input type="checkbox" name="reasons[]" value="total"> Total<br><br>
-
+        <input type="radio" name="route" value="to" checked> To
+        <input type="radio" name="route" value="from" checked> From <br><br>
 
         <input type="submit" value="Find" />
     </form>

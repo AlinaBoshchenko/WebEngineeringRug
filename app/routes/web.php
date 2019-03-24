@@ -15,7 +15,10 @@ Route::get('carriers/statistics/delays', 'PagesController@getDelaysPage');
 Route::get('/statistics', 'PagesController@getStatPage');
 Route::get('/statistics/carrier', 'PagesController@getStatCarPage');
 Route::get('/carriers/{carrier_code}/statistics/delays', 'PagesController@getDelaysCarPage');
-
+Route::get('/carriers/{carrier_code}/statistics/flights', 'PagesController@getFlightsStatPage');
+Route::get('/statistics/flights', 'PagesController@getStatisticsFlightsPage');
+Route::get('/statistics/minutes_delayed', 'PagesController@getStatisticsMinPage');
+Route::get('/carriers/statistics/minutes_delayed', 'PagesController@getStatMinPage');
 
 /**
  * API endpoints

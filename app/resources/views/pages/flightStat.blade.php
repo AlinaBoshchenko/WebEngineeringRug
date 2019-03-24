@@ -63,7 +63,7 @@
             border: 5px groove #ccc /* Граница между ячейками */
         }
         th {
-            background-color: #6ccfab;
+            background-color: #7d86cf;
             color: white;
             font-style: bold;
             font-size: 35px;
@@ -81,7 +81,9 @@
         var data;
 
         console.log("hiii");
-        showData.open('GET',"{!!  URL::route('api_specific_carrier_delayed_statistics', ['carrier_code'=>$data['carrier_code'],'airport1' =>$data['airport1'], 'airport2' => $data['airport2']]) !!} ");
+        showData.open('GET',"{!!  URL::route('api_get_flight_statistics', ['carrier_code'=>$data['carrier_code'],
+                             'route' =>$data['route'], 'month' =>$data['month'], 'year' =>$data['year'],
+                             'airport_code' => $data['airport_code']]) !!} ");
 
         showData.onload = function(){
             console.log("hello");
@@ -95,31 +97,38 @@
         //Create table and fetch data from JSON Object.
         $(document).ready(function(){
             $("button").click(function(){
-                var number_of_rows = data.length;
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Airport1</th><th>Airport2</th><th>Mean</th><th>Median</th><th>Standard deviation</th></tr></thead><tbody>';
+
+                var table_body = '<table width="100%"><thead><tr><th>Route</th><th>Date</th><th>Cancelled</th><th>On time</th><th>Delayed</th><th>Diverted</th><th>Total</th></tr></thead><tbody>';
 
 
                 table_body+='<tr>';
 
                 table_body +='<td>';
-                table_body +=data["airport1"]["airport_name"];
+                table_body +=data[0]["route"];
                 table_body +='</td>';
 
                 table_body +='<td>';
-                table_body +=data["airport2"]["airport_name"];
+                table_body +=data[0]["month"] + ' / ' + data[0]["year"];
                 table_body +='</td>';
 
                 table_body +='<td>';
-                table_body +=data["mean"];
+                table_body +=data[0]["statistics"]["cancelled"];
                 table_body +='</td>';
 
                 table_body +='<td>';
-                table_body +=data["median"];
+                table_body +=data[0]["statistics"]["on_time"];
                 table_body +='</td>';
 
                 table_body +='<td>';
-                table_body +=data["standard_deviation"];
+                table_body +=data[0]["statistics"]["delayed"];
+                table_body +='</td>';
+
+                table_body +='<td>';
+                table_body +=data[0]["statistics"]["diverted"];
+                table_body +='</td>';
+
+                table_body +='<td>';
+                table_body +=data[0]["statistics"]["total"];
                 table_body +='</td>';
                 table_body+='</tr>';
 
@@ -143,7 +152,7 @@
     </script>
 </head>
 
-<body background="/images/map1.png">
+<body background="/images/airstat.jpg">
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <button>Show statistics</button>
