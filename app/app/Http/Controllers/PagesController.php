@@ -125,6 +125,11 @@ class PagesController extends Controller
         return view('pages.statisticsMin');
     }
 
+    public function getRankingPage()
+    {
+        return view('pages.ranking');
+    }
+
     public function getStatMinPage(Request $request)
     {
 
@@ -142,6 +147,37 @@ class PagesController extends Controller
         ];
 
         return view('pages.statMin')->withData($data);
+    }
+
+    public function getRateDelaysPage(Request $request)
+    {
+
+        $year = $request['year'];
+
+
+        $data = [
+            'year' => $year
+        ];
+
+        return view('pages.rateDelays')->withData($data);
+    }
+
+    public function getRateCanPage(Request $request)
+    {
+
+        $year = $request['year'];
+
+
+        $data = [
+            'year' => $year
+        ];
+
+        return view('pages.rateCan')->withData($data);
+    }
+
+    public function postReviewPage()
+    {
+        return view('pages.postReview');
     }
 
 }

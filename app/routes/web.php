@@ -19,6 +19,10 @@ Route::get('/carriers/{carrier_code}/statistics/flights', 'PagesController@getFl
 Route::get('/statistics/flights', 'PagesController@getStatisticsFlightsPage');
 Route::get('/statistics/minutes_delayed', 'PagesController@getStatisticsMinPage');
 Route::get('/carriers/statistics/minutes_delayed', 'PagesController@getStatMinPage');
+Route::get('/ranking', 'PagesController@getRankingPage');
+Route::get('/carriers/rankings/number_of_delays', 'PagesController@getRateDelaysPage');
+Route::get('/carriers/rankings/ratio_of_cancellations', 'PagesController@getRateCanPage');
+Route::post('/review', 'PagesController@postReviewPage');
 
 /**
  * API endpoints

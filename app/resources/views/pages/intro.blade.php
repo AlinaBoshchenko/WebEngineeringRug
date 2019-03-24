@@ -32,10 +32,10 @@
             <a href = "http://localhost:8000/carriers" class="w3-button w3-block">Find carriers</a>
         </div>
         <div class="w3-col s3">
-            <a href = "http://localhost:8000/statistics" class="w3-button w3-block">Discover statistics</a>
+            <a href = "http://localhost:8000/ranking" class="w3-button w3-block">Carriers rank</a>
         </div>
         <div class="w3-col s3">
-            <a href = "http://localhost:8000/statistics/carrier" class="w3-button w3-block">Discover statistics for carrier</a>
+            <a href = "http://localhost:8000/reviews" class="w3-button w3-block">Post review</a>
         </div>
     </div>
 </div>
