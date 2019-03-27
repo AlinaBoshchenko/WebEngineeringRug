@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Handles requests for the 'carriers/{carrier_code}/statistics/flights' API endpoint.
+ * Get is for handeling GET request.
+ * Post is for POST request.
  */
 class FlightStatisticsController
 {
@@ -46,13 +48,13 @@ class FlightStatisticsController
             $statistics_collection = $this->getStatisticsForAll($carrier_code, $airport_code);
         } else if ($year === null) {
             if (!\is_numeric($month) || $month < 1 || $month > 12) {
-                return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+                return response('Bad syntax for input date', Response::HTTP_BAD_REQUEST);
             } else {
                 $statistics_collection = $this->getStatisticsForAMonth($carrier_code, $airport_code, $month);
             }
         } else if ($month === null) {
             if (!\is_numeric($year) || $year < 1000 || $year > date('Y')) {
-                return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+                return response('Bad syntax for input date', Response::HTTP_BAD_REQUEST);
             } else {
                 $statistics_collection = $this->getStatisticsForAYear($carrier_code, $airport_code, $year);
             }
@@ -72,7 +74,7 @@ class FlightStatisticsController
         }
 
         if($statistics_collection === [null]) {
-            return response('Statistics not found', Response::HTTP_NOT_FOUND);
+            return response('Statistics not found', Response::HTTP_OK);
         }
 
         $flight_statistics_array = $this->getFlightStatisticsArray($statistics_collection, $filter, $route);
@@ -82,7 +84,7 @@ class FlightStatisticsController
         }
 
         if(empty($flight_statistics_array)) {
-            return response('Flight statistics not found', Response::HTTP_NOT_FOUND);
+            return response('Flight statistics not found', Response::HTTP_OK);
         }
 
         $content_type_requested = $request->header('Accept');
@@ -160,7 +162,7 @@ class FlightStatisticsController
                 if ($added_statistic) {
                     $this->deleteStatistics($statistic->id);
                 }
-                return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+                return response('Wrong statistics input given.', Response::HTTP_BAD_REQUEST);
             }
 
             try {
@@ -257,7 +259,7 @@ class FlightStatisticsController
         }
 
         if($this->isNotCompleteStatisticArray($request) || $this->isWrongStatisticsInput($request)){
-            return response('Bad syntax', Response::HTTP_BAD_REQUEST);
+            return response('Wrong statistics input given.', Response::HTTP_BAD_REQUEST);
         }
 
         $statistic = $this->getStatistic($carrier_code, $airport_code, $year, $month);
@@ -464,7 +466,7 @@ class FlightStatisticsController
      *
      * @return array
      */
-    private function getFlightStatisticsArray(array $statistics_array, array $filter, string $route)
+    private function getFlightStatisticsArray($statistics_array, array $filter, string $route)
     {
         $flight_statistics_array = [];
         foreach ($statistics_array as $statistic) {
@@ -546,7 +548,8 @@ class FlightStatisticsController
             $request['on_time'] < 0 ||
             $request['total'] < 0 ||
             $request['delayed'] < 0 ||
-            $request['diverted'] < 0
+            $request['diverted'] < 0 ||
+            $request['total'] != ($request['on_time'] + $request['cancelled'] + $request['delayed'] + $request['diverted'])
         );
     }
 
