@@ -58,7 +58,7 @@ class CarrierDelayedStatisticsController extends Controller
         $carrier_as_array = $carrier_code ? (new CarriersController())->getCarrierAsArray($carrier_code, true) : null;
 
         if (empty($airport_1_as_array) || empty($airport_2_as_array || $carrier_as_array)) {
-            return response('Airport or carrier not found.', Response::HTTP_NOT_FOUND);
+            return response('Airport or carrier not found.', Response::HTTP_OK);
         }
 
         $content_body = \array_filter([
