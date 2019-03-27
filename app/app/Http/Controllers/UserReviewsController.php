@@ -42,11 +42,24 @@ class UserReviewsController extends Controller
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
 
-                foreach ($content_body as $row) {
-                    if (!\is_array($row)) {
-                        $row = [$row];
+
+                foreach ($content_body as $idx => $row) {
+                    $string = [
+                        'user_name' => $row['user_name'],
+                        'review' => $row['reviews'],
+                        'carrier_code_rank_1' => $row['carrier_code_rank_1'],
+                        'carrier_code_rank_2' => $row['carrier_code_rank_2'],
+                        'carrier_code_rank_3' => $row['carrier_code_rank_3'],
+                    ];
+
+                    foreach ($row['timestamp'] as $key => $timestamp){
+                        $string[$key] = $timestamp;
                     }
-                    fputcsv($FH, $row);
+
+                    if ($idx == 0) {
+                        fputcsv($FH, \array_keys($string));
+                    }
+
                 }
                 fclose($FH);
             };
@@ -114,7 +127,7 @@ class UserReviewsController extends Controller
         try{
             $review = UserReviews::where('id' , '=' , $id)->first();
             if($review && $review->user_name == $user_name){
-                return [$review];
+                return $review;
             }else{
                 return null;
             }

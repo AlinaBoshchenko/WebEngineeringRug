@@ -64,8 +64,8 @@ class MinuteStatisticsController
                             'carrier_link' => URL::route('api_get_carriers', $statistic['carrier_code'])
                         ],
                         'airport_code' => $airport_code,
-                        'year' => $year,
-                        'month' => $month,
+                        'year' => $statistic['year'],
+                        'month' => $statistic['month'],
                         'reasons' => \array_filter(
                             [
                                 'late_aircraft' => \in_array('late_aircraft', $reasons) ? $minutes_delayed_stats['late_aircraft'] : null,
