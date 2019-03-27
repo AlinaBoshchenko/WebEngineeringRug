@@ -13,7 +13,7 @@
 
         }
         .form-style-6 h1{
-            background: #43D1AF;
+            background: #191633;
             padding: 20px 0;
             font-size: 140%;
             font-weight: 300;
@@ -62,9 +62,9 @@
         .form-style-6 textarea:focus,
         .form-style-6 select:focus
         {
-            box-shadow: 0 0 5px #43D1AF;
+            box-shadow: 0 0 5px #130d4e;
             padding: 3%;
-            border: 1px solid #43D1AF;
+            border: 1px solid #1f194e;
 
         }
 
@@ -75,8 +75,8 @@
             -moz-box-sizing: border-box;
             width: 100%;
             padding: 3%;
-            background: #43D1AF;
-            border-bottom: 2px solid #30C29E;
+            background: #25223e;
+            border-bottom: 2px solid #100b3d;
             border-top-style: none;
             border-right-style: none;
             border-left-style: none;
@@ -85,7 +85,7 @@
         }
         .form-style-6 input[type="submit"]:hover,
         .form-style-6 input[type="button"]:hover{
-            background: #2EBC99;
+            background: #2d1d77;
 
         }
         body{
@@ -93,61 +93,16 @@
             margin-top: 15%;
         }
     </style>
-    <script>
-        window.addEventListener("load", function () {
-            function sendData() {
-                var XHR = new XMLHttpRequest();
-
-                // Bind the FormData object and the form element
-                var FD = new FormData(form);
-
-                // Define what happens on successful data submission
-                XHR.addEventListener("load", function(event) {
-                    alert(event.target.responseText);
-                });
-
-                // Define what happens in case of error
-                XHR.addEventListener("error", function(event) {
-                    alert('Oops! Something went wrong.');
-                });
-
-                // Set up our request
-                XHR.open('POST', '{!! URL::route('api_post_review') !!}',true);
-
-                // The data sent is what the user provided in the form
-                XHR.send(FD);
-            }
-
-            // Access the form element...
-            var form = document.getElementById("myForm");
-
-            // ...and take over its submit event.
-            form.addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                sendData();
-            });
-        });
-
-
-
-    </script>
 </head>
 
-<body  background="../images/map.png">
-<div></div>
+<body background="../images/port.png">
+
 <div class="form-style-6">
-    <h1>Post Review</h1>
-    <form id="myForm">
-        <input type="text" name="user_name" placeholder="User" />
-        <input type="text" name="review" placeholder="Review" />
-        <input type="text" name="carrier_code_rank_1" placeholder="Carrier #1" />
-        <input type="text" name="carrier_code_rank_2" placeholder="Carrier #2" />
-        <input type="text" name="carrier_code_rank_3" placeholder="Carrier #3" />
-        <input type="submit" value="Send!">
+
+    <form method="GET" action="additional/{location}">
+        <input type="text" name="location" placeholder="Type ICAO code here" />
+        <input type="submit" value="Find" />
     </form>
-
-
 </div>
 
 

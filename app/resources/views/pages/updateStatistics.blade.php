@@ -94,42 +94,39 @@
         }
     </style>
     <script>
-        window.addEventListener("load", function () {
-            function sendData() {
+
+        $(document).ready(function() {
+            $('#MyButton').click(function () {
                 var XHR = new XMLHttpRequest();
 
                 // Bind the FormData object and the form element
                 var FD = new FormData(form);
 
                 // Define what happens on successful data submission
-                XHR.addEventListener("load", function(event) {
+                XHR.addEventListener("load", function (event) {
                     alert(event.target.responseText);
                 });
 
                 // Define what happens in case of error
-                XHR.addEventListener("error", function(event) {
+                XHR.addEventListener("error", function (event) {
                     alert('Oops! Something went wrong.');
                 });
 
+                var carrier_code = document.getElementById("carrier_code").value;
+                var month = document.getElementById("month").value;
+                var year = document.getElementById("year").value;
+                var airport_code = document.getElementById("airport_code").value;
+
                 // Set up our request
-                XHR.open('POST', '{!! URL::route('api_post_review') !!}',true);
+                XHR.open('PUT',"http://localhost:8000/API/carriers/" + carrier_code + "/statistics/flights" + "?month=" + month + "&year=" + year + "&airport_code=" + airport_code);
 
                 // The data sent is what the user provided in the form
                 XHR.send(FD);
-            }
-
-            // Access the form element...
-            var form = document.getElementById("myForm");
-
-            // ...and take over its submit event.
-            form.addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                sendData();
             });
         });
 
-
+        // Access the form element...
+        var form = document.getElementById("myForm");
 
     </script>
 </head>
@@ -137,14 +134,20 @@
 <body  background="../images/map.png">
 <div></div>
 <div class="form-style-6">
-    <h1>Post Review</h1>
+    <h1>Update flight statistics</h1>
     <form id="myForm">
-        <input type="text" name="user_name" placeholder="User" />
-        <input type="text" name="review" placeholder="Review" />
-        <input type="text" name="carrier_code_rank_1" placeholder="Carrier #1" />
-        <input type="text" name="carrier_code_rank_2" placeholder="Carrier #2" />
-        <input type="text" name="carrier_code_rank_3" placeholder="Carrier #3" />
-        <input type="submit" value="Send!">
+        <input type="text" id="carrier_code" placeholder="carrier_code" />
+        <input type="text" id="month" placeholder="Month" />
+        <input type="text" id="year" placeholder="Year" />
+        <input type="text" id="airport_code" placeholder="Airport code" />
+
+        <input type="text" name="cancelled" placeholder="Cancelled" />
+        <input type="text" name="on_time" placeholder="On time" />
+        <input type="text" name="delayed" placeholder="Delayed" />
+        <input type="text" name="diverted" placeholder="Diverted" />
+        <input type="text" name="total" placeholder="Total" />
+
+        <input type="button" value="Update" id="MyButton" >
     </form>
 
 

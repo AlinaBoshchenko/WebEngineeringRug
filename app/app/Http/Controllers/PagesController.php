@@ -177,7 +177,39 @@ class PagesController extends Controller
 
     public function postReviewPage()
     {
+
         return view('pages.postReview');
     }
 
+    public function getExternalPage(Request $request)
+    {
+
+        $location = $request['location'];
+
+        $data = [
+            'location' => $location
+        ];
+
+        return view('pages.external')->withData($data);
+    }
+
+    public function getExternalIntroPage()
+    {
+        return view('pages.externalIntro');
+    }
+
+    public function deleteStatPage()
+    {
+
+        return view('pages.deleteStatistics');
+    }
+
+    public function updateStatPage($carrier_code)
+    {
+
+        $data = [
+            'carrier_code' => $carrier_code
+        ];
+        return view('pages.updateStatistics')->withData($data);
+    }
 }

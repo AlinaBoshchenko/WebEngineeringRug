@@ -100,7 +100,7 @@
                         table_body+='<tr>';
                         table_body +='<td>';
                         table_body +=data[k]["airport_name"] + '</br>';
-                        table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_name"] + '">view details</a>';
+                        table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_code"] + '">view details</a>';
                         table_body +='</td>';
 
                         table_body +='<td>';

@@ -101,7 +101,6 @@
 <div class="form-style-6">
     <h1>Find statistics for carrier</h1>
     <form method="GET" action="http://localhost:8000/carriers/{carrier_code}/statistics/delays">
-
         <input type="text" name="carrier_code" placeholder="Carrier code" />
         <input type="text" name="airport1" placeholder="Airport 1" />
         <input type="text" name="airport2" placeholder="Airport 2" />
