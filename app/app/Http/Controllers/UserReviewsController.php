@@ -80,7 +80,7 @@ class UserReviewsController extends Controller
      *
      * @return Response
      */
-    public function post(Request $request, string $user_name)
+    public function post(Request $request, string $user_name = null)
     {
         $review = $request['review'] ?? null;
         $carrier_code_rank_1 = $request['carrier_code_rank_1'] ?? null;

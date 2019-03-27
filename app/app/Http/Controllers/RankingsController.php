@@ -18,10 +18,6 @@ class RankingsController
      */
     public function get(Request $request, string $ranking_type)
     {
-        if($ranking_type != 'number_of_delays' && $ranking_type != 'ratio_of_cancellations'){
-            return response('Wrong ranking type is given', Response::HTTP_BAD_REQUEST);
-        }
-
         $year = $request['year'] ?? null;
 
         if ($year === null) {
@@ -30,6 +26,10 @@ class RankingsController
 
         if ($year < 1000 || $year > Date('Y')) {
             return response('Bad date given by the user. Rankings cannot be shown.', Response::HTTP_BAD_REQUEST);
+        }
+
+        if($ranking_type != 'number_of_delays' && $ranking_type != 'ratio_of_cancellations'){
+            return response('Wrong ranking type is given', Response::HTTP_BAD_REQUEST);
         }
 
         if($ranking_type == 'number_of_delays'){
@@ -43,7 +43,7 @@ class RankingsController
         if ($content_body === null) {
             return response('Problem loading the ranking.', Response::HTTP_INTERNAL_SERVER_ERROR);
         } elseif (empty($content_body)) {
-            return response('No ranking found.', Response::HTTP_NOT_FOUND);
+            return response('No ranking found.', Response::HTTP_OK);
         }
 
         $content_type_requested = $request->header('Accept');
