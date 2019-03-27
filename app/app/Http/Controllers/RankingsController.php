@@ -34,9 +34,7 @@ class RankingsController
 
         if($ranking_type == 'number_of_delays'){
             $content_body = $this->getNumberOfDelaysRanking($year);
-        }
-
-        if($ranking_type == 'ratio_of_cancellations'){
+        } else {
             $content_body = $this->getRatioOfCancellationRanking($year);
         }
 

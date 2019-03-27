@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Handles requests for the 'carriers/{carrier_code}/statistics/flights' API endpoint.
+ * Get is for handeling GET request.
+ * Post is for POST request.
  */
 class FlightStatisticsController
 {
