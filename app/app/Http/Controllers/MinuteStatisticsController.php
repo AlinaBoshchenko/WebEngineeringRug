@@ -49,7 +49,7 @@ class MinuteStatisticsController
         }
 
         if (empty($statistics)) {
-            return response('No statistics found', Response::HTTP_NOT_FOUND);
+            return response('No statistics found', Response::HTTP_OK);
         }
 
         $minute_delay_array = [];
@@ -64,8 +64,8 @@ class MinuteStatisticsController
                             'carrier_link' => URL::route('api_get_carriers', $statistic['carrier_code'])
                         ],
                         'airport_code' => $airport_code,
-                        'year' => $year,
-                        'month' => $month,
+                        'year' => $statistic['year'],
+                        'month' => $statistic['month'],
                         'reasons' => \array_filter(
                             [
                                 'late_aircraft' => \in_array('late_aircraft', $reasons) ? $minutes_delayed_stats['late_aircraft'] : null,
@@ -78,7 +78,7 @@ class MinuteStatisticsController
         }
 
         if (empty($minute_delay_array)) {
-            return response('No corresponding statistics', Response::HTTP_NOT_FOUND);
+            return response('No corresponding statistics', Response::HTTP_OK);
         }
 
         $content_type_requested = $request->header('Accept');
