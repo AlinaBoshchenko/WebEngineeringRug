@@ -27,7 +27,7 @@ Route::get('/additional/{location}', 'PagesController@getExternalPage');
 Route::get('/additional/', 'PagesController@getExternalIntroPage');
 Route::get('/statistics/delete', 'PagesController@deleteStatPage');
 Route::get('/carriers/{carrier_code}/statistics/flights/update', 'PagesController@updateStatPage');
-
+Route::get('/carriers/{carrier_code}/statistics/flights/post', 'PagesController@postStatPage');
 /**
  * API endpoints
  */

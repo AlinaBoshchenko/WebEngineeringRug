@@ -212,4 +212,13 @@ class PagesController extends Controller
         ];
         return view('pages.updateStatistics')->withData($data);
     }
+
+    public function postStatPage($carrier_code)
+    {
+
+        $data = [
+            'carrier_code' => $carrier_code
+        ];
+        return view('pages.postStatistics')->withData($data);
+    }
 }

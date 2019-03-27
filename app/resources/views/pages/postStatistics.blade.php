@@ -95,39 +95,38 @@
     </style>
     <script>
 
-            $(document).ready(function() {
-                $('#MyButton').click(function () {
-                    var XHR = new XMLHttpRequest();
+        $(document).ready(function() {
+            $('#MyButton').click(function () {
+                var XHR = new XMLHttpRequest();
 
-                    // Bind the FormData object and the form element
-                    var FD = new FormData(form);
+                // Bind the FormData object and the form element
+                var FD = new FormData(form);
 
-                    // Define what happens on successful data submission
-                    XHR.addEventListener("load", function (event) {
-                        alert(event.target.responseText);
-                    });
-
-                    // Define what happens in case of error
-                    XHR.addEventListener("error", function (event) {
-                        alert('Oops! Something went wrong.');
-                    });
-
-                    var carrier_code = document.getElementById("carrier_code").value;
-                    var month = document.getElementById("month").value;
-                    var year = document.getElementById("year").value;
-                    var airport_code = document.getElementById("airport_code").value;
-
-                    // Set up our request
-                    XHR.open('POSTE', "http://localhost:8000/API/carriers/statistics/flights?carrier_code=" + carrier_code + "&month=" + month + "&year=" + year + "&airport_code=" + airport_code);
-
-                    // The data sent is what the user provided in the form
-                    XHR.send(FD);
+                // Define what happens on successful data submission
+                XHR.addEventListener("load", function (event) {
+                    alert(event.target.responseText);
                 });
+
+                // Define what happens in case of error
+                XHR.addEventListener("error", function (event) {
+                    alert('Oops! Something went wrong.');
+                });
+
+                var carrier_code = document.getElementById("carrier_code").value;
+                var month = document.getElementById("month").value;
+                var year = document.getElementById("year").value;
+                var airport_code = document.getElementById("airport_code").value;
+
+                // Set up our request
+                XHR.open('POST',"http://localhost:8000/API/carriers/" + carrier_code + "/statistics/flights" + "?month=" + month + "&year=" + year + "&airport_code=" + airport_code);
+
+                // The data sent is what the user provided in the form
+                XHR.send(FD);
             });
+        });
 
-            // Access the form element...
-            var form = document.getElementById("myForm");
-
+        // Access the form element...
+        var form = document.getElementById("myForm");
 
     </script>
 </head>
@@ -135,13 +134,20 @@
 <body  background="../images/map.png">
 <div></div>
 <div class="form-style-6">
-    <h1>Delete statistics</h1>
+    <h1>Add new flight statistics</h1>
     <form id="myForm">
         <input type="text" id="carrier_code" placeholder="carrier_code" />
         <input type="text" id="month" placeholder="Month" />
         <input type="text" id="year" placeholder="Year" />
         <input type="text" id="airport_code" placeholder="Airport code" />
-        <input type="button" value="Delete" id="MyButton" >
+
+        <input type="text" name="cancelled" placeholder="Cancelled" />
+        <input type="text" name="on_time" placeholder="On time" />
+        <input type="text" name="delayed" placeholder="Delayed" />
+        <input type="text" name="diverted" placeholder="Diverted" />
+        <input type="text" name="total" placeholder="Total" />
+
+        <input type="button" value="Post" id="MyButton" >
     </form>
 
 
