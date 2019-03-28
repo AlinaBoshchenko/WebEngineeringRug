@@ -27,7 +27,7 @@ class HandlePutFormData
      */
     public function handle($request, Closure $next)
     {
-        if ($request->method() == 'POST' or $request->method() == 'GET')
+        if ($request->method() == 'POST' or $request->method() == 'GET' or $request->method() == 'DELETE')
         {
             return $next($request);
         }

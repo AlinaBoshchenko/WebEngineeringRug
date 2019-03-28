@@ -114,7 +114,8 @@
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
                 var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Rank</th><th>Carrier</th><th>Ratio of cancellationss</th></tr></thead><tbody>';
+                var table_body = '<table width="100%"><thead><tr><th>Rank</th><th>Carrier</th><th>Ratio of ' +
+                    'cancellations</th></tr></thead><tbody>';
                 for(k in data){
 
                     table_body+='<tr>';
