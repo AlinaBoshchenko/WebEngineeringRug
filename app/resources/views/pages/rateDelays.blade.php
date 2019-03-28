@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Rate cancellations</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         h2 {
@@ -89,48 +89,37 @@
             data = JSON.parse(this.response);
             console.log(data);
         };
-
-        showData.onerror = function () {
-            data = JSON.parse("oh no");
-        };
-
         showData.send();
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            if (!data.isArray) {
-                $('#error_printing').html("problem!");
-            } else {
+        window.addEventListener("load", function (){
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Rank</th><th>Carrier</th><th>Number of delays</th></tr></thead><tbody>';
+            for(k in data){
 
-                $("button").click(function () {
-                    var k = 0;
-                    var table_body = '<table width="100%"><thead><tr><th>Rank</th><th>Carrier</th><th>Number of delays</th></tr></thead><tbody>';
-                    for (k in data) {
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body +=data[k]["rank"];
+                table_body +='</td>';
 
-                        table_body += '<tr>';
-                        table_body += '<td>';
-                        table_body += data[k]["rank"];
-                        table_body += '</td>';
+                table_body +='<td>';
+                table_body +=data[k]["carrier_code"] + '</br>';
+                table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_code"] + '">view details</a>';
+                table_body +='</td>';
 
-                        table_body += '<td>';
-                        table_body += data[k]["carrier_code"] + '</br>';
-                        table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_code"] + '">view details</a>';
-                        table_body += '</td>';
-
-                        table_body += '<td>';
-                        table_body += data[k]["num_of_delays"];
-                        table_body += '</td>';
+                table_body +='<td>';
+                table_body +=data[k]["num_of_delays"];
+                table_body +='</td>';
 
 
-                        table_body += '</tr>';
+                table_body+='</tr>';
 
-                    }
-                    table_body += '</tbody></table>';
-                    $('#tableDiv').html(table_body);
-                    //display data..........
-                });
             }
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
+            //display data..........
+
 
 // for search function.................................. only............................
             $("#search").on("keyup", function() {
@@ -149,7 +138,6 @@
 <body background="/images/lg.png">
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Show rating</button>
     <div id="tableDiv" style="margin-top: 40px">
     </div>
 </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Reviews by User</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         h2 {
@@ -85,13 +85,12 @@
 
             data = JSON.parse(this.response);
             console.log(data);
-        }
+        };
         showData.send();
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            $("button").click(function(){
+        window.addEventListener("load", function (){
                 var number_of_rows = data.length;
                 var k = 0;
                 var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Review</th><th>Carrier #1</th><th>Carrier #2</th><th>Carrier #3</th><th>Time</th></tr></thead><tbody>';
@@ -128,7 +127,7 @@
                 table_body+='</tbody></table>';
                 $('#tableDiv').html(table_body);
                 //display data..........
-            });
+
 
 // for search function.................................. only............................
             $("#search").on("keyup", function() {
@@ -145,7 +144,6 @@
 </head>
 <body background="../images/more2.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Create Table</button>
     <input type="text" id="search" placeholder="Search data here....."></input>
     <div id="tableDiv" style="margin-top: 40px>
         Table will be generated here.

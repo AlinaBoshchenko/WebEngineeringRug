@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Reviews by ID</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         h2 {
@@ -146,7 +146,6 @@
 <body background="/images/more3.jpg">
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Show review</button>
     <div id="tableDiv" style="margin-top: 40px">
     </div>
 </div>

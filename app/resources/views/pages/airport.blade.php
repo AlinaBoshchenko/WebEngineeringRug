@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Airport</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         h2 {
@@ -103,7 +103,7 @@
             data2 = JSON.parse(this.response);
             console.log(data2);
 
-        }
+        };
         showData2.send();
 
 
@@ -111,9 +111,7 @@
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            $("button").click(function(){
-
+        window.addEventListener("load", function (){
 
                 var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
 
@@ -157,19 +155,13 @@
 
 
                 //display data..........
-            });
-
 
         });
     </script>
 </head>
 <body background="../images/air.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Show airport</button>
-    <div id="tableDiv" style="margin-top: 40px">
-        Table will be generated here.
-    </div>
-
+    <div id="tableDiv" style="margin-top: 40px"></div>
 </div>
 <p id="p1"></p>
 </body>

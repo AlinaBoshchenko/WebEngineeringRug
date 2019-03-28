@@ -96,10 +96,9 @@
     <script>
 
         $(document).ready(function() {
-            $('#MyButton').click(function (form) {
+            $('#MyButton').click(function () {
                 var XHR = new XMLHttpRequest();
 
-                // Access the form element...
                 var form = document.getElementById("myForm");
 
                 // Bind the FormData object and the form element
@@ -127,10 +126,14 @@
                 XHR.send(FD);
             });
         });
+
+        // Access the form element...
+
+
     </script>
 </head>
 
-<body  background="../images/map.png">
+<body>
 <div></div>
 <div class="form-style-6">
     <h1>Update flight statistics</h1>
@@ -140,7 +143,7 @@
         <input type="text" id="year" placeholder="Year" />
         <input type="text" id="airport_code" placeholder="Airport code" />
 
-        <input type="text" name="cancelled" placeholder="Cancelled" />
+        <input type="text" name="cancelled" id="cancelled" placeholder="Cancelled" />
         <input type="text" name="on_time" placeholder="On time" />
         <input type="text" name="delayed" placeholder="Delayed" />
         <input type="text" name="diverted" placeholder="Diverted" />
@@ -149,9 +152,6 @@
         <input type="button" value="Update" id="MyButton" >
     </form>
 
-
 </div>
-
-
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>External</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         h2 {
@@ -93,8 +93,7 @@ showData.send();
 
 //JSON Object End................
 //Create table and fetch data from JSON Object.
-$(document).ready(function(){
-    $("button").click(function(){
+        window.addEventListener("load", function (){
 
 
         var table_body = '<table width="100%"><thead><tr><th>Wind-Speed</th><th>Wind-Direction</th></tr></thead><tbody>';
@@ -133,15 +132,12 @@ $(document).ready(function(){
         table_body+='</tbody></table>';
         $('#tableDiv').html(table_body);
         //display data..........
-    });
-
 
 });
 </script>
 </head>
 <body background="../images/port.png">
     <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Show additional info</button>
     <div id="tableDiv" style="margin-top: 40px"></div>
 
 </div>

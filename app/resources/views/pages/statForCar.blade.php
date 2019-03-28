@@ -88,7 +88,7 @@
 
             data = JSON.parse(this.response);
             console.log(data);
-        }
+        };
         showData.send();
 
         //JSON Object End................

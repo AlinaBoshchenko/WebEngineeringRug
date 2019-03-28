@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Flight statistic</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         h2 {
@@ -104,7 +104,6 @@
         var showData = new XMLHttpRequest();
         var data;
 
-        console.log("hiii");
         showData.open('GET',"{!!  URL::route('api_get_flight_statistics', ['carrier_code'=>$data['carrier_code'],
                              'route' =>$data['route'], 'month' =>$data['month'], 'year' =>$data['year'],
                              'airport_code' => $data['airport_code']]) !!} ");
@@ -113,14 +112,13 @@
             console.log("hello");
 
             data = JSON.parse(this.response);
-            console.log(data);
-        }
+
+        };
         showData.send();
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            $("button").click(function(){
+        window.addEventListener("load", function (){
 
                 var table_body = '<table width="100%"><thead><tr><th>Route</th><th>Date</th><th>Cancelled</th><th>On time</th><th>Delayed</th><th>Diverted</th><th>Total</th></tr></thead><tbody>';
 
@@ -160,7 +158,6 @@
                 table_body+='</tbody></table>';
                 $('#tableDiv').html(table_body);
                 //display data..........
-            });
 
 // for search function.................................. only............................
             $("#search").on("keyup", function() {
@@ -179,7 +176,6 @@
 <body background="/images/airstat.jpg">
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Show statistics</button>
     <a href="http://localhost:8000/statistics/delete" class="button">Delete statistics</a>
     <a href="http://localhost:8000/carriers/{carrier_code}/statistics/flights/update" class="button">Update statistics</a>
     <a href="http://localhost:8000/carriers/{carrier_code}/statistics/flights/post" class="button">Post statistics</a>
