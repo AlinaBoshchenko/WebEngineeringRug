@@ -58,7 +58,7 @@ class CarrierDelayedStatisticsController extends Controller
         $carrier_as_array = $carrier_code ? (new CarriersController())->getCarrierAsArray($carrier_code, true) : null;
 
         if (empty($airport_1_as_array) || empty($airport_2_as_array || $carrier_as_array)) {
-            return response('Airport or carrier not found.', Response::HTTP_NOT_FOUND);
+            return response('Airport or carrier not found.', Response::HTTP_OK);
         }
 
         $content_body = \array_filter([
@@ -79,21 +79,27 @@ class CarrierDelayedStatisticsController extends Controller
         if ($content_type_requested == 'text/csv') {
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
-                foreach ($content_body as $idx => $row) {
-                    $string = ['mean' => $row['mean'], 'median' => $row['median'], 'standard_deviation' => $row['standard_deviation']];
-                    foreach ($row['airport1'] as $key => $airport1){
-                        $string[$key] = $airport1;
-                    }
-//                    foreach ($row['airport2'] as $key => $airport2){
-//                        $string[$key] = $airport2;
-//                    }
+                $string = [
+                    'mean' => $content_body['mean'],
+                    'median' => $content_body['median'],
+                    'standard_deviation' => $content_body['standard_deviation'],
+                ];
 
-                    if ($idx == 0) {
-                        fputcsv($FH, \array_keys($string));
-                    }
-
-                    fputcsv($FH, $string);
+                foreach ($content_body['airport1'] as $key => $airport1){
+                    $string['airport1_' . $key] = $airport1;
                 }
+                foreach ($content_body['airport2'] as $key => $airport2){
+                    $string['airport1_' . $key] = $airport2;
+                }
+
+                if ($content_body['carrier']) {
+                    foreach ($content_body['carrier'] as $key => $carrier){
+                        $string['carrier_' . $key] = $carrier;
+                    }
+                }
+
+                fputcsv($FH, \array_keys($string));
+                fputcsv($FH, $string);
                 fclose($FH);
             };
 
