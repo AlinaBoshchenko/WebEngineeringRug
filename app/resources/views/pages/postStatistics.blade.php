@@ -96,8 +96,10 @@
     <script>
 
         $(document).ready(function() {
-            $('#MyButton').click(function () {
+            $('#MyButton').click(function (form) {
                 var XHR = new XMLHttpRequest();
+
+                var form = document.getElementById("myForm");
 
                 // Bind the FormData object and the form element
                 var FD = new FormData(form);
@@ -126,7 +128,7 @@
         });
 
         // Access the form element...
-        var form = document.getElementById("myForm");
+
 
     </script>
 </head>
@@ -141,7 +143,7 @@
         <input type="text" id="year" placeholder="Year" />
         <input type="text" id="airport_code" placeholder="Airport code" />
 
-        <input type="text" name="cancelled" placeholder="Cancelled" />
+        <input type="text" name="cancelled" id="cancelled" placeholder="Cancelled" />
         <input type="text" name="on_time" placeholder="On time" />
         <input type="text" name="delayed" placeholder="Delayed" />
         <input type="text" name="diverted" placeholder="Diverted" />

@@ -99,6 +99,9 @@
             $('#MyButton').click(function () {
                 var XHR = new XMLHttpRequest();
 
+                // Access the form element...
+                var form = document.getElementById("myForm");
+
                 // Bind the FormData object and the form element
                 var FD = new FormData(form);
 
@@ -124,10 +127,6 @@
                 XHR.send(FD);
             });
         });
-
-        // Access the form element...
-        var form = document.getElementById("myForm");
-
     </script>
 </head>
 
