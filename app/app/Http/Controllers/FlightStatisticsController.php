@@ -131,7 +131,7 @@ class FlightStatisticsController
         $year = $request['year'] ?? null;
         $month = $request['month'] ?? null;
 
-        if($airport_code === null || $year === null || $month === null){
+        if($airport_code === null || $year === null || $month === null || $this->isNotCompleteStatisticArray($request)){
             return response('Required input is not given by the user', Response::HTTP_BAD_REQUEST);
         }
 
@@ -181,7 +181,7 @@ class FlightStatisticsController
                 if($added_statistic){
                     $this->deleteStatistics($statistic->id);
                 }
-                return response('Unable to create a new flight statistic', Response::HTTP_INTERNAL_SERVER_ERROR);
+                return response('Unable to create a new flight statistic'.$e->getTraceAsString(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         } else {
             return response('There is already flight statistic existing', Response::HTTP_INTERNAL_SERVER_ERROR);
