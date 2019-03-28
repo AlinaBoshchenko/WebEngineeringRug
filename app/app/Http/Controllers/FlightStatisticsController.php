@@ -7,6 +7,7 @@ use App\Statistic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Input;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -74,7 +75,7 @@ class FlightStatisticsController
         }
 
         if($statistics_collection === [null]) {
-            return response('Statistics not found', Response::HTTP_OK);
+            return response([], Response::HTTP_OK);
         }
 
         $flight_statistics_array = $this->getFlightStatisticsArray($statistics_collection, $filter, $route);

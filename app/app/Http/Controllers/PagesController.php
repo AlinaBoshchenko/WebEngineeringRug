@@ -246,8 +246,6 @@ class PagesController extends Controller
     }
     public function getByIdPage(Request $request)
     {
-
-
         $user_name = $request['user_name'];
         $review_id = $request['review_id'];
 

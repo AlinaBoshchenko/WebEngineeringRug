@@ -4,6 +4,15 @@
     <title>Dynamic Table</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
+        .isa_info, .isa_success, .isa_warning, .isa_error {
+            margin: 10px 0px;
+            padding:12px;
+
+        }
+        .isa_info {
+            color: #0a8051;
+            background-color: #abf8bc;
+        }
         h2 {
             font-size: 1em;
             font-weight: 100%;
@@ -86,15 +95,24 @@
         showData.onload = function(){
             console.log("hello");
 
-            data = JSON.parse(this.response);
-            console.log(data);
+            data = [];
+            if (this.status == 404) {
+                $('#p1').html("Invalid input in form.");
+            } else if (this.status != 200) {
+                $('#p1').html(this.response.toString());
+            } else {
+                data = JSON.parse(this.response);
+
+                if (data.length == 0) {
+                    $('#p1').html("No statistics found");
+                }
+            }
         };
         showData.send();
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            $("button").click(function(){
+        window.addEventListener("load", function (){
                 var number_of_rows = data.length;
                 var k = 0;
                 var table_body = '<table width="100%"><thead><tr><th>Airport1</th><th>Airport2</th><th>Mean</th><th>Median</th><th>Standard deviation</th></tr></thead><tbody>';
@@ -127,7 +145,6 @@
                 table_body+='</tbody></table>';
                 $('#tableDiv').html(table_body);
                 //display data..........
-            });
 
 // for search function.................................. only............................
             $("#search").on("keyup", function() {
@@ -144,9 +161,10 @@
 </head>
 
 <body background="/images/map1.png">
+<div class="isa_info" id = "p1"></div>
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Show statistics</button>
+
     <div id="tableDiv" style="margin-top: 40px">
     </div>
 </div>

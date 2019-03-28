@@ -98,8 +98,6 @@
             function sendData() {
                 var XHR = new XMLHttpRequest();
 
-                // Bind the FormData object and the form element
-                var form = document.getElementById("myForm");
                 var FD = new FormData(form);
 
                 // Define what happens on successful data submission
@@ -119,8 +117,7 @@
                 XHR.send(FD);
             }
 
-            // Access the form element...
-
+            var form = document.getElementById("myForm");
 
             // ...and take over its submit event.
             form.addEventListener("submit", function (event) {

@@ -4,6 +4,16 @@
     <title>Flight statistic</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
+
+        .isa_info, .isa_success, .isa_warning, .isa_error {
+            margin: 10px 0px;
+            padding:12px;
+
+        }
+        .isa_info {
+            color: #00529B;
+            background-color: #BDE5F8;
+        }
         h2 {
             font-size: 1em;
             font-weight: 100%;
@@ -111,8 +121,18 @@
         showData.onload = function(){
             console.log("hello");
 
-            data = JSON.parse(this.response);
+            data = [];
+            if (this.status == 404) {
+                $('#p1').html("Invalid input in form.");
+            } else if (this.status != 200) {
+                $('#p1').html(this.response.toString());
+            } else {
+                data = JSON.parse(this.response);
 
+                if (data.length == 0) {
+                    $('#p1').html("No statistics found");
+                }
+            }
         };
         showData.send();
 
@@ -174,16 +194,13 @@
 </head>
 
 <body background="/images/airstat.jpg">
+<div class="isa_info" id = "p1"></div>
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <a href="http://localhost:8000/statistics/delete" class="button">Delete statistics</a>
-    <a href="http://localhost:8000/carriers/{carrier_code}/statistics/flights/update" class="button">Update statistics</a>
-    <a href="http://localhost:8000/carriers/{carrier_code}/statistics/flights/post" class="button">Post statistics</a>
 
     <div id="tableDiv" style="margin-top: 40px">
     </div>
 </div>
-<p id="p1"></p>
 
 </body>
 </html>

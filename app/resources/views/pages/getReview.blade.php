@@ -4,6 +4,7 @@
     <title>Get review</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style type="text/css">
+
         .form-style-6{
             font: 95% Arial, Helvetica, sans-serif;
             max-width: 400px;
@@ -99,7 +100,7 @@
 
 <div class="form-style-6">
 
-    <form method="GET" action="/reviews/AlinaBoshchenko/{review_id}">
+    <form method="GET" action="/reviews/{user_name}/{review_id}">
         <input type="text" name="user_name" placeholder="Type User name here" />
         <input type="text" name="review_id" placeholder="Type review ID here" />
         <input type="submit" value="Find" />

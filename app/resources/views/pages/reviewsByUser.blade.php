@@ -4,6 +4,15 @@
     <title>Reviews by User</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
+        .isa_info, .isa_success, .isa_warning, .isa_error {
+            margin: 10px 0px;
+            padding:12px;
+
+        }
+        .isa_info {
+            color: #3b6741;
+            background-color: #93c9a7;
+        }
         h2 {
             font-size: 1em;
             font-weight: 100%;
@@ -83,8 +92,18 @@
         showData.onload = function(){
             console.log("hello");
 
-            data = JSON.parse(this.response);
-            console.log(data);
+            data = [];
+            if (this.status == 404) {
+                $('#p1').html("Invalid input in form.");
+            } else if (this.status != 200) {
+                $('#p1').html(this.response.toString());
+            } else {
+                data = JSON.parse(this.response);
+
+                if (data.length == 0) {
+                    $('#p1').html("No statistics found");
+                }
+            }
         };
         showData.send();
 
@@ -143,6 +162,7 @@
     </script>
 </head>
 <body background="../images/more2.jpg" style="width: 1000px">
+<div class="isa_info" id = "p1"></div>
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <input type="text" id="search" placeholder="Search data here....."></input>
     <div id="tableDiv" style="margin-top: 40px>

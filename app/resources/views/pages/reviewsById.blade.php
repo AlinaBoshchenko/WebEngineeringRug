@@ -4,6 +4,7 @@
     <title>Reviews by ID</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
+
         h2 {
             font-size: 1em;
             font-weight: 100%;
@@ -13,6 +14,15 @@
             padding-bottom: 2em;
             background-color: #fff;
             color: #ffe9e6;
+        }
+        .isa_info, .isa_success, .isa_warning, .isa_error {
+            margin: 10px 0px;
+            padding:12px;
+
+        }
+        .isa_info {
+            color: #3b6741;
+            background-color: #93c9a7;
         }
         h2 {
             display: block;
@@ -83,42 +93,50 @@
         showData.onload = function(){
             console.log("hello");
 
-            data = JSON.parse(this.response);
-            console.log(data);
-        }
+            data = [];
+            if (this.status == 404) {
+                $('#p1').html("Invalid input in form.");
+            } else if (this.status != 200) {
+                $('#p1').html(this.response.toString());
+            } else {
+                data = JSON.parse(this.response);
+
+                if (data.length == 0) {
+                    $('#p1').html("No statistics found");
+                }
+            }
+        };
         showData.send();
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            $("button").click(function(){
+        window.addEventListener("load", function () {
 
                 var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Review</th><th>Carrier #1</th><th>Carrier #2</th><th>Carrier #3</th><th>Time</th></tr></thead><tbody>';
 
-
                     table_body+='<tr>';
                     table_body +='<td>';
-                    table_body +=data["user_name"];
+                    table_body +=data[0]["user_name"];
                     table_body +='</td>';
 
                     table_body +='<td>';
-                    table_body +=data["reviews"];
+                    table_body +=data[0]["reviews"];
                     table_body +='</td>';
 
                     table_body +='<td>';
-                    table_body +=data["carrier_code_rank_1"];
+                    table_body +=data[0]["carrier_code_rank_1"];
                     table_body +='</td>';
 
                     table_body +='<td>';
-                    table_body +=data["carrier_code_rank_2"];
+                    table_body +=data[0]["carrier_code_rank_2"];
                     table_body +='</td>';
 
                     table_body +='<td>';
-                    table_body +=data["carrier_code_rank_3"];
+                    table_body +=data[0]["carrier_code_rank_3"];
                     table_body +='</td>';
 
                     table_body +='<td>';
-                    table_body +=data["timestamp"]["date"];
+                    table_body +=data[0]["timestamp"]["date"];
                     table_body +='</td>';
 
                     table_body+='</tr>';
@@ -127,7 +145,7 @@
                 table_body+='</tbody></table>';
                 $('#tableDiv').html(table_body);
                 //display data..........
-            });
+
 
 // for search function.................................. only............................
             $("#search").on("keyup", function() {
@@ -144,7 +162,7 @@
 </head>
 
 <body background="/images/more3.jpg">
-
+<div class="isa_info" id = "p1"></div>
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <div id="tableDiv" style="margin-top: 40px">
     </div>

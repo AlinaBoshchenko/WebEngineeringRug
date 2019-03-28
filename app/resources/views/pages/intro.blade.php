@@ -39,7 +39,21 @@
         </div>
     </div>
 </div>
-
+<div class="w3-bottom">
+    <div class="w3-row w3-large w3-light-grey">
+        <div class="w3-col s4">
+            <a href = "http://localhost:8000/statistics/delete" class="w3-button w3-block">Delete statistics</a>
+        </div>
+        <div class="w3-col s4">
+            <a href = "http://localhost:8000/carriers/{carrier_code}/statistics/flights/update" class="w3-button
+            w3-block">Update statistics</a>
+        </div>
+        <div class="w3-col s4">
+            <a href = "http://localhost:8000/carriers/{carrier_code}/statistics/flights/post" class="w3-button
+            w3-block">Post statistics</a>
+        </div>
+    </div>
+</div>
 
 
 <!-- Content -->
