@@ -7,8 +7,31 @@
 Route::get('airports', 'PagesController@getAirportsPage');
 Route::get('about', 'PagesController@getAbout');
 Route::get('contact', 'PagesController@getContact');
-Route::get('intro', 'PagesController@getIntro');
-
+Route::get('/', 'PagesController@getIntro');
+Route::get('carriers', 'PagesController@getCarriersPage');
+Route::get('carriers/{carrier_code}', 'PagesController@getCarrierPage');
+Route::get('airports/{airport_code}', 'PagesController@getAirportPage');
+Route::get('carriers/statistics/delays', 'PagesController@getDelaysPage');
+Route::get('/statistics', 'PagesController@getStatPage');
+Route::get('/statistics/carrier', 'PagesController@getStatCarPage');
+Route::get('/carriers/{carrier_code}/statistics/delays', 'PagesController@getDelaysCarPage');
+Route::get('/carriers/{carrier_code}/statistics/flights', 'PagesController@getFlightsStatPage');
+Route::get('/statistics/flights', 'PagesController@getStatisticsFlightsPage');
+Route::get('/statistics/minutes_delayed', 'PagesController@getStatisticsMinPage');
+Route::get('/carriers/statistics/minutes_delayed', 'PagesController@getStatMinPage');
+Route::get('/ranking', 'PagesController@getRankingPage');
+Route::get('/carriers/rankings/number_of_delays', 'PagesController@getRateDelaysPage');
+Route::get('/carriers/rankings/ratio_of_cancellations', 'PagesController@getRateCanPage');
+Route::get('/reviews/post', 'PagesController@postReviewPage');
+Route::get('/additional/{location}', 'PagesController@getExternalPage');
+Route::get('/additional/', 'PagesController@getExternalIntroPage');
+Route::get('/statistics/delete', 'PagesController@deleteStatPage');
+Route::get('/carriers/{carrier_code}/statistics/flights/update', 'PagesController@updateStatPage');
+Route::get('/carriers/{carrier_code}/statistics/flights/post', 'PagesController@postStatPage');
+Route::get('/reviews/byuser', 'PagesController@getReviewsPage');
+Route::get('/reviews/{username}', 'PagesController@getByUserPage');
+Route::get('/reviews/byuser/byid', 'PagesController@getReviewPage');
+Route::get('/reviews/{user_name}/{review_id}', 'PagesController@getByIdPage');
 /**
  * API endpoints
  */
@@ -78,7 +101,8 @@ Route::get('API/carriers/rankings/{ranking_type}', [
     ]
 );
 
-Route::post('API/reviews/{user_name}', [
+// UPDATE REQUEREMENTS DOCUMENT
+Route::post('API/reviews}', [
         'as' => 'api_post_review',
         'uses' => 'UserReviewsController@post'
     ]

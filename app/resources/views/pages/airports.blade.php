@@ -25,6 +25,7 @@
             font-weight: 100%;
             line-height: 1.42em;
             color: #FFFFFF;
+            background-size: 100%;
 
         }
         button{
@@ -41,7 +42,7 @@
             font-size: 15px;
         }
         table {
-            border-collapse: collapse;;
+            border-collapse: collapse;
             width: 100%;
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
@@ -99,7 +100,7 @@
                         table_body+='<tr>';
                         table_body +='<td>';
                         table_body +=data[k]["airport_name"] + '</br>';
-                         table_body += '<a href="' + data[k]["link"] + '">view details</a>';
+                        table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_code"] + '">view details</a>';
                         table_body +='</td>';
 
                         table_body +='<td>';
