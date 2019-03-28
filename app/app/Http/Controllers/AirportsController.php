@@ -31,7 +31,7 @@ class AirportsController extends Controller
         if ($content_body === null) {
             return response('Problem loading from airports database.', Response::HTTP_INTERNAL_SERVER_ERROR);
         } elseif (empty($content_body)) {
-            return response('No airport(s) not found.', Response::HTTP_NOT_FOUND);
+            return response('No airport(s) not found.', Response::HTTP_OK);
         }
 
         $content_type_requested = $request->header('Accept');
