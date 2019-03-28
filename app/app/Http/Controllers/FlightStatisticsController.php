@@ -181,7 +181,7 @@ class FlightStatisticsController
                 if($added_statistic){
                     $this->deleteStatistics($statistic->id);
                 }
-                return response('Unable to create a new flight statistic', Response::HTTP_INTERNAL_SERVER_ERROR);
+                return response('Unable to create a new flight statistic'.$e->getTraceAsString(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         } else {
             return response('There is already flight statistic existing', Response::HTTP_INTERNAL_SERVER_ERROR);

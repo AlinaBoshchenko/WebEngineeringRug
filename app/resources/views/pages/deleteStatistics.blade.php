@@ -114,11 +114,11 @@
 
                     var carrier_code = document.getElementById("carrier_code").value;
                     var month = document.getElementById("month").value;
-                    var year = document.getElementById("year").value;
+                    var year = document.getElementById("year").value;á
                     var airport_code = document.getElementById("airport_code").value;
 
                     // Set up our request
-                    XHR.open('POSTE', "http://localhost:8000/API/carriers/statistics/flights?carrier_code=" + carrier_code + "&month=" + month + "&year=" + year + "&airport_code=" + airport_code);
+                    XHR.open('DELETE', "http://localhost:8000/API/carriers/" + carrier_code + "/statistics/flights?" + "month=" + month + "&year=" + year + "&airport_code=" + airport_code);
 
                     // The data sent is what the user provided in the form
                     XHR.send(FD);

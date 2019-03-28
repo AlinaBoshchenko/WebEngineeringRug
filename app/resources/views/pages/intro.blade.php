@@ -127,7 +127,7 @@
             <div class="w3-container">
                 <h3>Post your review of the carriers </h3>
                 <p class="w3-opacity">Just fill the form to express your feedback</p>
-                <p><a href="http://localhost:8000/reviews" class="w3-button w3-block">Try</a></p>
+                <p><a href="http://localhost:8000/reviews/post" class="w3-button w3-block">Try</a></p>
             </div>
         </div>
     </div>
