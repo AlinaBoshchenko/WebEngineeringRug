@@ -221,4 +221,41 @@ class PagesController extends Controller
         ];
         return view('pages.postStatistics')->withData($data);
     }
+
+    public function getReviewsPage()
+    {
+        return view('pages.getReviews');
+    }
+
+    public function getReviewPage()
+    {
+        return view('pages.getReview');
+    }
+
+    public function getByUserPage(Request $request)
+    {
+
+
+        $user_name = $request['user_name'];
+
+        $data = [
+            'user_name' => $user_name
+        ];
+
+        return view('pages.reviewsByUser')->withData($data);
+    }
+    public function getByIdPage(Request $request)
+    {
+
+
+        $user_name = $request['user_name'];
+        $review_id = $request['review_id'];
+
+        $data = [
+            'user_name' => $user_name,
+            'review_id' => $review_id
+        ];
+
+        return view('pages.reviewsById')->withData($data);
+    }
 }

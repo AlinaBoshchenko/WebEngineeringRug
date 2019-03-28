@@ -35,10 +35,12 @@
             <a href = "http://localhost:8000/ranking" class="w3-button w3-block">Carriers rank</a>
         </div>
         <div class="w3-col s3">
-            <a href = "http://localhost:8000/reviews" class="w3-button w3-block">Post review</a>
+            <a href = "http://localhost:8000/additional" class="w3-button w3-block">Additional</a>
         </div>
     </div>
 </div>
+
+
 
 <!-- Content -->
 <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
@@ -112,6 +114,46 @@
         </div>
 
       </div>
+
+<!--Additional -->
+<div class="w3-row-padding" id="about">
+    <div class="w3-center w3-padding-64">
+        <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Want more?</span>
+    </div>
+
+    <div class="w3-third w3-margin-bottom">
+        <div class="w3-card-4">
+            <img src="../images/more1.jpg" alt="Post your own review" style="width:100%">
+            <div class="w3-container">
+                <h3>Post your review of the carriers </h3>
+                <p class="w3-opacity">Just fill the form to express your feedback</p>
+                <p><a href="http://localhost:8000/reviews" class="w3-button w3-block">Try</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-third w3-margin-bottom">
+        <div class="w3-card-4">
+            <img src="../images/more2.jpg" alt="Reviews" style="width:100%">
+            <div class="w3-container">
+                <h3>Find review</h3>
+                <p class="w3-opacity">Find reviews by user's name</p>
+                <p><a href="http://localhost:8000/reviews/byuser" class="w3-button w3-block">Try</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="w3-third w3-margin-bottom">
+        <div class="w3-card-4">
+            <img src="../images/more3.jpg" alt="All" style="width:100%">
+            <div class="w3-container">
+                <h3>Find review by id</h3>
+                <p class="w3-opacity">Find particular review of particular user</p>
+                <p><a href="http://localhost:8000/reviews/byuser/byid" class="w3-button w3-block">Try</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- Footer -->

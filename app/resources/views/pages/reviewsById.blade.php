@@ -27,15 +27,13 @@
             color: #FFFFFF;
             background-size: 100%;
 
-
-
         }
         button{
             border-radius: 10px;
             height: 45px;
             width: 150px;
             text-align: center;
-            background-color: #535454;
+            background-color: #213646;
             font-size: 15px;
             color: #ffffff;
         }
@@ -50,7 +48,7 @@
             font-weight: 100%;
             line-height: 2em;
             color: #f7c6c5;
-            background: #8c8f88;
+            background: #A7A1AE;
             padding: 20px;
 
 
@@ -63,7 +61,7 @@
             border: 5px groove #ccc /* Граница между ячейками */
         }
         th {
-            background-color: #7d86cf;
+            background-color: #396669;
             color: white;
             font-style: bold;
             font-size: 35px;
@@ -72,30 +70,6 @@
             color: #FFE8E6;
         } /* link color */
 
-        .button {
-            display: inline-block;
-            padding: 15px 25px;
-            font-size: 24px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            outline: none;
-            color: #fff;
-            background-color: #617d88;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 9px #999;
-        }
-
-        .button:hover {background-color: #6c8e84
-        }
-
-        .button:active {
-            background-color: #406575;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
-
 
     </style>
     <script >
@@ -103,11 +77,8 @@
 
         var showData = new XMLHttpRequest();
         var data;
-
         console.log("hiii");
-        showData.open('GET',"{!!  URL::route('api_get_flight_statistics', ['carrier_code'=>$data['carrier_code'],
-                             'route' =>$data['route'], 'month' =>$data['month'], 'year' =>$data['year'],
-                             'airport_code' => $data['airport_code']]) !!} ");
+        showData.open('GET',"{!!  URL::route('api_get_review', ['user_name' =>$data['user_name'], 'review_id' => $data['review_id']]) !!} ");
 
         showData.onload = function(){
             console.log("hello");
@@ -122,39 +93,35 @@
         $(document).ready(function(){
             $("button").click(function(){
 
-                var table_body = '<table width="100%"><thead><tr><th>Route</th><th>Date</th><th>Cancelled</th><th>On time</th><th>Delayed</th><th>Diverted</th><th>Total</th></tr></thead><tbody>';
+                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Review</th><th>Carrier #1</th><th>Carrier #2</th><th>Carrier #3</th><th>Time</th></tr></thead><tbody>';
 
 
-                table_body+='<tr>';
+                    table_body+='<tr>';
+                    table_body +='<td>';
+                    table_body +=data["user_name"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data[0]["route"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data["reviews"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data[0]["month"] + ' / ' + data[0]["year"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data["carrier_code_rank_1"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data[0]["statistics"]["cancelled"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data["carrier_code_rank_2"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data[0]["statistics"]["on_time"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data["carrier_code_rank_3"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data[0]["statistics"]["delayed"];
-                table_body +='</td>';
+                    table_body +='<td>';
+                    table_body +=data["timestamp"]["date"];
+                    table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data[0]["statistics"]["diverted"];
-                table_body +='</td>';
-
-                table_body +='<td>';
-                table_body +=data[0]["statistics"]["total"];
-                table_body +='</td>';
-                table_body+='</tr>';
+                    table_body+='</tr>';
 
 
                 table_body+='</tbody></table>';
@@ -176,18 +143,12 @@
     </script>
 </head>
 
-<body background="/images/airstat.jpg">
+<body background="/images/more3.jpg">
 
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Show statistics</button>
-    <a href="http://localhost:8000/statistics/delete" class="button">Delete statistics</a>
-    <a href="http://localhost:8000/carriers/{carrier_code}/statistics/flights/update" class="button">Update statistics</a>
-    <a href="http://localhost:8000/carriers/{carrier_code}/statistics/flights/post" class="button">Post statistics</a>
-
+    <button>Show review</button>
     <div id="tableDiv" style="margin-top: 40px">
     </div>
 </div>
-<p id="p1"></p>
-
 </body>
 </html>

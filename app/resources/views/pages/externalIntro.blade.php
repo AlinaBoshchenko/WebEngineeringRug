@@ -98,7 +98,7 @@
 <body background="../images/port.png">
 
 <div class="form-style-6">
-
+    <h1>Here you can find additional information about airports</h1>
     <form method="GET" action="additional/{location}">
         <input type="text" name="location" placeholder="Type ICAO code here" />
         <input type="submit" value="Find" />

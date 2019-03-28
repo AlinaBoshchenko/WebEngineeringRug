@@ -3,140 +3,109 @@
 <head>
     <title>Dynamic Table</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <style>
-        h2 {
-            font-size: 1em;
-            font-weight: 100%;
-            text-align: center;
-            display: block;
-            line-height: 1em;
-            padding-bottom: 2em;
-            background-color: #fff;
-            color: #ffe9e6;
-        }
-        h2 {
-            display: block;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        body {
-
-            font-family: 'Nunito', sans-serif;
-            font-weight: 100%;
-            line-height: 1.42em;
-            color: #FFFFFF;
-            background-size: 100%;
+    <style type="text/css">
+        .form-style-6{
+            font: 95% Arial, Helvetica, sans-serif;
+            max-width: 400px;
+            margin: 10px auto;
+            padding: 16px;
+            background: #F7F7F7;
 
         }
-        button{
-            border-radius: 10px;
-            height: 45px;
-            width: 150px;
+        .form-style-6 h1{
+            background: #191633;
+            padding: 20px 0;
+            font-size: 140%;
+            font-weight: 300;
             text-align: center;
-            background-color: #460a20;
-            font-size: 15px;
-            color: #ffffff;
+            color: #fff;
+            margin: -16px -16px 16px -16px;
+
+
         }
-        input{
-            height: 35px;
-            font-size: 15px;
-        }
-        table {
-            border-collapse: collapse;
+        .form-style-6 input[type="text"],
+        .form-style-6 input[type="date"],
+        .form-style-6 input[type="datetime"],
+        .form-style-6 input[type="email"],
+        .form-style-6 input[type="number"],
+        .form-style-6 input[type="search"],
+        .form-style-6 input[type="time"],
+        .form-style-6 input[type="url"],
+        .form-style-6 textarea,
+        .form-style-6 select
+        {
+            -webkit-transition: all 0.30s ease-in-out;
+            -moz-transition: all 0.30s ease-in-out;
+            -ms-transition: all 0.30s ease-in-out;
+            -o-transition: all 0.30s ease-in-out;
+            outline: none;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
             width: 100%;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 100%;
-            line-height: 2em;
-            color: #f7c6c5;
-            background: #A7A1AE;
-            padding: 20px;
-
+            background: #fff;
+            margin-bottom: 4%;
+            border: 1px solid #ccc;
+            padding: 3%;
+            color: #555;
+            font: 95% Arial, Helvetica, sans-serif;
 
         }
-        th, td {
-            text-align: center;
-            padding: 15px;
-            font-size: 20px;
-            color: #ffffff;
-            border: 5px groove #ccc /* Граница между ячейками */
-        }
-        th {
-            background-color: #261941;
-            color: white;
-            font-style: bold;
-            font-size: 35px;
-        }
-        a {
-            color: #FFE8E6;
-        } /* link color */
+        .form-style-6 input[type="text"]:focus,
+        .form-style-6 input[type="date"]:focus,
+        .form-style-6 input[type="datetime"]:focus,
+        .form-style-6 input[type="email"]:focus,
+        .form-style-6 input[type="number"]:focus,
+        .form-style-6 input[type="search"]:focus,
+        .form-style-6 input[type="time"]:focus,
+        .form-style-6 input[type="url"]:focus,
+        .form-style-6 textarea:focus,
+        .form-style-6 select:focus
+        {
+            box-shadow: 0 0 5px #130d4e;
+            padding: 3%;
+            border: 1px solid #1f194e;
 
+        }
 
+        .form-style-6 input[type="submit"],
+        .form-style-6 input[type="button"]{
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            width: 100%;
+            padding: 3%;
+            background: #25223e;
+            border-bottom: 2px solid #100b3d;
+            border-top-style: none;
+            border-right-style: none;
+            border-left-style: none;
+            color: #fff;
+
+        }
+        .form-style-6 input[type="submit"]:hover,
+        .form-style-6 input[type="button"]:hover{
+            background: #2d1d77;
+
+        }
+        body{
+            background-size: 100%;
+            margin-top: 15%;
+        }
     </style>
-    <script >
-        //JSON Object................
-
-        var showData = new XMLHttpRequest();
-        var data;
-        console.log("hiii");
-        showData.open('GET',"{!!  URL::route('api_get_reviews', ['user_name' =>$data['user_name']]) !!} ");
-
-        showData.onload = function(){
-            console.log("hello");
-
-            data = JSON.parse(this.response);
-            console.log(data);
-        }
-        showData.send();
-
-        //JSON Object End................
-        //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            $("button").click(function(){
-                var number_of_rows = data.length;
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
-                for(k in data){
-
-                    table_body+='<tr>';
-                    table_body +='<td>';
-                    table_body +=data[k]["airport_name"] + '</br>';
-                    table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_code"] + '">view details</a>';
-                    table_body +='</td>';
-
-                    table_body +='<td>';
-                    table_body +=data[k]["airport_code"];
-                    table_body +='</td>';
-
-
-                    table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
-            });
-
-// for search function.................................. only............................
-            $("#search").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("table tr").filter(function(index) {
-                    if(index>0){
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    }
-                });
-            });
-
-        });
-    </script>
 </head>
-<body background="images/intro1.jpg" style="width: 1000px">
-<div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Create Table</button>
-    <input type="text" id="search" placeholder="Search data here....."></input>
-    <div id="tableDiv" style="margin-top: 40px>
-        Table will be generated here.
-    </div>
+
+<body background="/images/more3.jpg">
+
+<div class="form-style-6">
+
+    <form method="GET" action="/reviews/AlinaBoshchenko/{review_id}">
+        <input type="text" name="user_name" placeholder="Type User name here" />
+        <input type="text" name="review_id" placeholder="Type review ID here" />
+        <input type="submit" value="Find" />
+    </form>
 </div>
-<p id="p1"></p>
+
+
 </body>
 </html>
