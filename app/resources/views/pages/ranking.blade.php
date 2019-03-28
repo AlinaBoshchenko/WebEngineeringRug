@@ -81,6 +81,8 @@
     </center></div>
 <br>
 
+<div class="error_printing" id= "error_printing"></div>
+
 <div class="row">
     <div class="column">
         <div class="card">

@@ -96,8 +96,10 @@
     <script>
 
             $(document).ready(function() {
-                $('#MyButton').click(function () {
+                $('#MyButton').click(function (form) {
                     var XHR = new XMLHttpRequest();
+
+                    var form = document.getElementById("myForm");
 
                     // Bind the FormData object and the form element
                     var FD = new FormData(form);
@@ -114,7 +116,7 @@
 
                     var carrier_code = document.getElementById("carrier_code").value;
                     var month = document.getElementById("month").value;
-                    var year = document.getElementById("year").value;á
+                    var year = document.getElementById("year").value;
                     var airport_code = document.getElementById("airport_code").value;
 
                     // Set up our request
@@ -124,10 +126,6 @@
                     XHR.send(FD);
                 });
             });
-
-            // Access the form element...
-            var form = document.getElementById("myForm");
-
 
     </script>
 </head>

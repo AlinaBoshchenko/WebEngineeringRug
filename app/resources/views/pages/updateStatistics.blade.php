@@ -96,7 +96,7 @@
     <script>
 
         $(document).ready(function() {
-            $('#MyButton').click(function () {
+            $('#MyButton').click(function (form) {
                 var XHR = new XMLHttpRequest();
 
                 // Access the form element...
