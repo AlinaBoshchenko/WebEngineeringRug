@@ -23,8 +23,7 @@ Route::get('/ranking', 'PagesController@getRankingPage');
 Route::get('/carriers/rankings/number_of_delays', 'PagesController@getRateDelaysPage');
 Route::get('/carriers/rankings/ratio_of_cancellations', 'PagesController@getRateCanPage');
 Route::get('/reviews/post', 'PagesController@postReviewPage');
-Route::get('/additional/{location}', 'PagesController@getExternalPage');
-Route::get('/additional/', 'PagesController@getExternalIntroPage');
+Route::get('/additional', 'PagesController@getExternalPage');
 Route::get('/statistics/delete', 'PagesController@deleteStatPage');
 Route::get('/carriers/{carrier_code}/statistics/flights/update', 'PagesController@updateStatPage');
 Route::get('/carriers/{carrier_code}/statistics/flights/post', 'PagesController@postStatPage');
@@ -32,6 +31,7 @@ Route::get('/reviews/byuser', 'PagesController@getReviewsPage');
 Route::get('/reviews/{username}', 'PagesController@getByUserPage');
 Route::get('/reviews/byuser/byid', 'PagesController@getReviewPage');
 Route::get('/reviews/{user_name}/{review_id}', 'PagesController@getByIdPage');
+
 /**
  * API endpoints
  */

@@ -269,10 +269,9 @@ class PagesController extends Controller
     }
 
     /**
-     * Returns page with external api data
+     * Returns page with current geolocation's properties
      *
-     * @param Request $request
-     * @return mixed
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getExternalPage(Request $request)
     {
@@ -394,4 +393,5 @@ class PagesController extends Controller
 
         return view('pages.reviewsById')->withData($data);
     }
+
 }

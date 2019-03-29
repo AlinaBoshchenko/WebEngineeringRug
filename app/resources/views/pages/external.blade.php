@@ -28,129 +28,46 @@
             font-size: 1.5em;
             font-weight: bold;
         }
-        body {
-
-            background-size: 100%;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 100%;
-            line-height: 1.42em;
-            color: #ff111d;
-
-        }
-        button{
-            border-radius: 10px;
-            height: 45px;
-            width: 150px;
-            text-align: center;
-            background-color: #460113;
-            font-size: 15px;
-            color: #ffffff;
-        }
-        input{
-            height: 35px;
-            font-size: 15px;
-        }
-        table {
-            border-collapse: collapse;;
-            width: 100%;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 100%;
-            line-height: 2em;
-            color: #f74077;
-            background: #f7dfd3;
-            padding: 20px;
-
-
-        }
-        th, td {
-            text-align: center;
-            padding: 15px;
-            font-size: 20px;
-            color: #5b1408;
-            border: 5px groove #ccc /* Граница между ячейками */
-        }
-        th {
-            background-color: #4b3132;
-            color: white;
-            font-style: bold;
-            font-size: 35px;
-        }
-        a {
-            color: #FFE8E6;
-        } /* link color */
-
-
     </style>
-    <script >
-        //JSON Object................
+    <script type="text/javascript">
+        navigator.geolocation.getCurrentPosition(doStuff, error, setOptions);
 
-        var showData = new XMLHttpRequest();
-        var data;
-        showData.open('GET', 'https://avwx.rest/api/metar/{{$data["location"]}}',true);
+        function setOptions(geoLoc) {
+            geoLoc.enableHighAccuracy = true;
+            geoLoc.timeout = 30;
+            geoLoc.maximumAge = 0;
+        }
+        function init() {
+            navigator.geolocation.getCurrentPosition(doStuff, error, setOptions);
+        }
 
-        showData.onload = function(){
+        var wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
+        function doStuff(geoLoc) {
+            document.getElementById("refreshTimestamp").innerHTML = "Last refresh: " + Date.now();
+            document.getElementById("latitude").innerHTML = "Latitude: " + geoLoc.coords.latitude;
+            document.getElementById("longitude").innerHTML = "Longitude: " + geoLoc.coords.longitude;
+            document.getElementById("altitude").innerHTML = "Altitude: " + geoLoc.coords.altitude;
+            document.getElementById("accuracy").innerHTML = "Accuracy: " + geoLoc.coords.accuracy;
+            document.getElementById("altitudeAccuracy").innerHTML = "Altitude Accuracy: " + geoLoc.coords.altitudeAccuracy;
+            document.getElementById("heading").innerHTML = "Heading: " + geoLoc.coords.heading;
+            document.getElementById("speed").innerHTML = "Speed: " + geoLoc.coords.speed;
+        }
 
-            data = [];
-            if (this.status == 404) {
-                $('#p1').html("Invalid input in form.");
-            } else if (this.status != 200) {
-                $('#p1').html(this.response.toString());
-            } else {
-                data = JSON.parse(this.response);
-
-                if (data.length == 0) {
-                    $('#p1').html("No statistics found");
-                }
-            }
-        };
-        showData.send();
-
-
-        //JSON Object End................
-        //Create table and fetch data from JSON Object.
-        window.addEventListener("load", function (){
-
-            var table_body = '<table width="100%"><thead><tr><th>Wind-Speed</th><th>Wind-Direction</th></tr></thead><tbody>';
-
-            table_body+='<tr>';
-            table_body +='<td>';
-            table_body += data["Wind-Speed"];
-            table_body +='</td>';
-
-            table_body +='<td>';
-            table_body += data["Wind-Direction"];
-            table_body +='</td>';
-            table_body+='</tr>';
-
-            table_body += '<table width="100%"><thead><tr><th>Visibility</th><th>Dewpoint</th><th>Temperature</th></tr></thead><tbody>';
-
-            table_body+='<tr>';
-            table_body +='<td>';
-            table_body +=data["Visibility"];
-            table_body +='</td>';
-
-            table_body +='<td>';
-            table_body +=data["Dewpoint"];
-            table_body +='</td>';
-
-            table_body +='<td>';
-            table_body +=data["Units"]["Temperature"];
-            table_body +='</td>';
-
-            table_body+='</tr>';
-
-            table_body+='</tbody></table>';
-            $('#tableDiv').html(table_body);
-            //display data..........
-        });
+        function error(geoLoc) {
+            document.getElementById("error").innerHTML = "ERROR! Code: " + geoLoc.code + "; Message: " + geoLoc.message;
+        }
     </script>
 </head>
-<body background="../images/port.png">
-<div class="isa_info" id = "p1"></div>
-<div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <div id="tableDiv" style="margin-top: 40px"></div>
-
-</div>
-<p id="p1"></p>
+<body onload="init()">
+<h1>Current geoposition's properties:</h1>
+<p id="refreshTimestamp"></p>
+<p id="latitude"></p>
+<p id="longitude"></p>
+<p id="altitude"></p>
+<p id="accuracy"></p>
+<p id="altitudeAccuracy"></p>
+<p id="heading"></p>
+<p id="speed"></p>
+<p id="error"></p>
 </body>
 </html>
