@@ -10,21 +10,33 @@ use Illuminate\Support\Facades\URL;
  */
 class PagesController extends Controller
 {
-    public function getIndex()
-    {
-        return view ('pages.welcome');
-    }
 
+    /**
+     * Returns front page
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getIntro()
     {
         return view('pages.intro');
     }
 
+    /**
+     * Returns page with the list of all the airports
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getAirportsPage()
     {
         return view('pages.airports');
     }
 
+    /**
+     * Returns page of the specific airport
+     *
+     * @param $airport_code
+     * @return mixed
+     */
     public function getAirportPage($airport_code)
     {
         $data = [
@@ -37,12 +49,22 @@ class PagesController extends Controller
         return view('pages.airport')->withData($data, $data2);
     }
 
+    /**
+     * Returns page with the list of all the carriers
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getCarriersPage()
     {
         return view('pages.carriers');
     }
 
-
+    /**
+     * Returns page of the specific carrier
+     *
+     * @param $carrier_code
+     * @return mixed
+     */
     public function getCarrierPage($carrier_code)
     {
         $data = [
@@ -52,6 +74,12 @@ class PagesController extends Controller
         return view('pages.carrier')->withData($data);
     }
 
+    /**
+     * Returns page with statistics of delays for two airports
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getDelaysPage(Request $request)
     {
 
@@ -67,17 +95,32 @@ class PagesController extends Controller
         return view('pages.delays')->withData($data);
     }
 
+    /**
+     * Returns page with form for two airports' statistics
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getStatPage()
     {
         return view('pages.statistics');
     }
 
+    /**
+     * Returns page with carrier's statistics form
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getStatCarPage()
     {
         return view('pages.statisticsCar');
     }
 
-
+    /**
+     * Returns page with carrier's statistics
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getDelaysCarPage(Request $request)
     {
         $airport1 = $request['airport1'];
@@ -94,6 +137,12 @@ class PagesController extends Controller
         return view('pages.statForCar')->withData($data);
     }
 
+    /**
+     *  Returns page with flight statistics
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getFlightsStatPage(Request $request)
     {
 
@@ -115,21 +164,42 @@ class PagesController extends Controller
         return view('pages.flightStat')->withData($data);
     }
 
+    /**
+     *  Returns page with flights statistics form
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getStatisticsFlightsPage()
     {
         return view('pages.statisticsFlights');
     }
 
+    /**
+     * Returns page with  statistics in minutes form
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getStatisticsMinPage()
     {
         return view('pages.statisticsMin');
     }
 
+
+    /**
+     * Returns page with two options of ranking
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getRankingPage()
     {
         return view('pages.ranking');
     }
 
+    /**
+     * Returns page with statistics in minutes
+     * @param Request $request
+     * @return mixed
+     */
     public function getStatMinPage(Request $request)
     {
 
@@ -149,6 +219,12 @@ class PagesController extends Controller
         return view('pages.statMin')->withData($data);
     }
 
+    /**
+     * Returns page with rating by number of delays
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getRateDelaysPage(Request $request)
     {
 
@@ -162,6 +238,12 @@ class PagesController extends Controller
         return view('pages.rateDelays')->withData($data);
     }
 
+    /**
+     * Returns page with rating by cancellations
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getRateCanPage(Request $request)
     {
 
@@ -175,12 +257,23 @@ class PagesController extends Controller
         return view('pages.rateCan')->withData($data);
     }
 
+    /**
+     * Returns page with post review form
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function postReviewPage()
     {
 
         return view('pages.postReview');
     }
 
+    /**
+     * Returns page with external api data
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getExternalPage(Request $request)
     {
 
@@ -193,17 +286,33 @@ class PagesController extends Controller
         return view('pages.external')->withData($data);
     }
 
+    /**
+     * Returns page with search bar for external api
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getExternalIntroPage()
     {
         return view('pages.externalIntro');
     }
 
+    /**
+     * Returns page with delete statistics form
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function deleteStatPage()
     {
 
         return view('pages.deleteStatistics');
     }
 
+    /**
+     * Returns page with update statistics form
+     *
+     * @param $carrier_code
+     * @return mixed
+     */
     public function updateStatPage($carrier_code)
     {
 
@@ -213,6 +322,12 @@ class PagesController extends Controller
         return view('pages.updateStatistics')->withData($data);
     }
 
+    /**
+     * Returns page with post statistics form
+     *
+     * @param $carrier_code
+     * @return mixed
+     */
     public function postStatPage($carrier_code)
     {
 
@@ -222,16 +337,32 @@ class PagesController extends Controller
         return view('pages.postStatistics')->withData($data);
     }
 
+
+    /**
+     * Returns page with form to get reviews by user
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getReviewsPage()
     {
         return view('pages.getReviews');
     }
 
+    /**Returns page with form to get review by user and review id
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getReviewPage()
     {
         return view('pages.getReview');
     }
 
+    /**
+     * Returns page with  reviews by user
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getByUserPage(Request $request)
     {
 
@@ -244,6 +375,13 @@ class PagesController extends Controller
 
         return view('pages.reviewsByUser')->withData($data);
     }
+
+    /**
+     * Returns page with review by user and review id
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function getByIdPage(Request $request)
     {
         $user_name = $request['user_name'];
