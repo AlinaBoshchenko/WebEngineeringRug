@@ -89,12 +89,9 @@
         var showData = new XMLHttpRequest();
         var data;
 
-        console.log("hiii");
         showData.open('GET',"{!!  URL::route('api_carrier_delayed_statistics', ['airport1' =>$data['airport1'], 'airport2' => $data['airport2']]) !!} ");
 
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -116,7 +113,6 @@
                 var number_of_rows = data.length;
                 var k = 0;
                 var table_body = '<table width="100%"><thead><tr><th>Airport1</th><th>Airport2</th><th>Mean</th><th>Median</th><th>Standard deviation</th></tr></thead><tbody>';
-
 
                     table_body+='<tr>';
 
@@ -141,12 +137,10 @@
                     table_body +='</td>';
                     table_body+='</tr>';
 
-
                 table_body+='</tbody></table>';
                 $('#tableDiv').html(table_body);
                 //display data..........
 
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {
@@ -155,7 +149,6 @@
                     }
                 });
             });
-
         });
     </script>
 </head>

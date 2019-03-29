@@ -87,12 +87,9 @@
 
         var showData = new XMLHttpRequest();
         var data;
-        console.log("hiii");
         showData.open('GET',"{!!  URL::route('api_get_review', ['user_name' =>$data['user_name'], 'review_id' => $data['review_id']]) !!} ");
 
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -111,43 +108,39 @@
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function () {
+            var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Review</th><th>Carrier #1</th><th>Carrier #2</th><th>Carrier #3</th><th>Time</th></tr></thead><tbody>';
 
-                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Review</th><th>Carrier #1</th><th>Carrier #2</th><th>Carrier #3</th><th>Time</th></tr></thead><tbody>';
+            table_body+='<tr>';
+            table_body +='<td>';
+            table_body +=data[0]["user_name"];
+            table_body +='</td>';
 
-                    table_body+='<tr>';
-                    table_body +='<td>';
-                    table_body +=data[0]["user_name"];
-                    table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data[0]["reviews"];
+            table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[0]["reviews"];
-                    table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data[0]["carrier_code_rank_1"];
+            table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[0]["carrier_code_rank_1"];
-                    table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data[0]["carrier_code_rank_2"];
+            table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[0]["carrier_code_rank_2"];
-                    table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data[0]["carrier_code_rank_3"];
+            table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[0]["carrier_code_rank_3"];
-                    table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data[0]["timestamp"]["date"];
+            table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[0]["timestamp"]["date"];
-                    table_body +='</td>';
-
-                    table_body+='</tr>';
-
-
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
+            table_body+='</tr>';
 
 
-// for search function.................................. only............................
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
+
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {

@@ -20,8 +20,6 @@
             text-align: center;
             color: #fff;
             margin: -16px -16px 16px -16px;
-
-
         }
         .form-style-6 input[type="text"],
         .form-style-6 input[type="date"],

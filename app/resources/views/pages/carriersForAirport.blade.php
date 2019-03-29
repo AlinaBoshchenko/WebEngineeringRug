@@ -20,7 +20,6 @@
             font-weight: bold;
         }
         body {
-
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
             line-height: 1.42em;
@@ -41,7 +40,6 @@
             font-size: 15px;
         }
         table {
-
             width: 100%;
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
@@ -75,12 +73,9 @@
 
         var showData = new XMLHttpRequest();
         var data;
-        console.log("hiii");
         showData.open('GET', 'http://localhost:8000/API/airport/ {{$data["airport_code"]}}/carriers',true);
 
         showData.onload = function(){
-            console.log("hello");
-
             data = JSON.parse(this.response);
             console.log(data);
         };
@@ -89,30 +84,27 @@
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
-                var number_of_rows = data.length;
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
-                for(k in data){
+            var number_of_rows = data.length;
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
+            for(k in data){
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body +=data[k]["carrier_name"] + '</br>';
+                table_body += '<a href="' + data[k]["link"] + '">view details</a>';
+                table_body +='</td>';
 
-                    table_body+='<tr>';
-                    table_body +='<td>';
-                    table_body +=data[k]["carrier_name"] + '</br>';
-                    table_body += '<a href="' + data[k]["link"] + '">view details</a>';
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["carrier_code"];
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["carrier_code"];
-                    table_body +='</td>';
+                table_body+='</tr>';
 
+            }
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
+            //display data..........
 
-                    table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
-
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {

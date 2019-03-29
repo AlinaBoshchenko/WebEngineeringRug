@@ -141,10 +141,7 @@
         <input type="text" id="airport_code" placeholder="Airport code" />
         <input type="button" value="Delete" id="MyButton" >
     </form>
-
-
 </div>
-
 
 </body>
 </html>

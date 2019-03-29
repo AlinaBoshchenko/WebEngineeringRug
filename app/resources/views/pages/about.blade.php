@@ -197,7 +197,6 @@
         for (var i = 0; i < myBooks.length; i++) {
             for (var key in myBooks[i]) {
                 col.push(key);
-                console.log(key);
             }
         }
 

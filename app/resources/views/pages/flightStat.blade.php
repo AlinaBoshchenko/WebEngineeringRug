@@ -119,8 +119,6 @@
                              'airport_code' => $data['airport_code']]) !!} ");
 
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -139,9 +137,7 @@
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
-
                 var table_body = '<table width="100%"><thead><tr><th>Route</th><th>Date</th><th>Cancelled</th><th>On time</th><th>Delayed</th><th>Diverted</th><th>Total</th></tr></thead><tbody>';
-
 
                 table_body+='<tr>';
 
@@ -179,7 +175,6 @@
                 $('#tableDiv').html(table_body);
                 //display data..........
 
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {

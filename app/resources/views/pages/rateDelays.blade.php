@@ -89,12 +89,9 @@
         var showData = new XMLHttpRequest();
         var data;
 
-        console.log("hiii");
         showData.open('GET',"{!!  URL::route('api_get_number_of_delays_ranking', ['rating_type'=>"number_of_delays", 'year'=>$data['year']]) !!} ");
 
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -116,7 +113,6 @@
             var k = 0;
             var table_body = '<table width="100%"><thead><tr><th>Rank</th><th>Carrier</th><th>Number of delays</th></tr></thead><tbody>';
             for(k in data){
-
                 table_body+='<tr>';
                 table_body +='<td>';
                 table_body +=data[k]["rank"];
@@ -137,10 +133,7 @@
             }
             table_body+='</tbody></table>';
             $('#tableDiv').html(table_body);
-            //display data..........
 
-
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {

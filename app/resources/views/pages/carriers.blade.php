@@ -83,8 +83,6 @@
         showData.open('GET', 'http://localhost:8000/API/carriers',true);
 
         showData.onload = function(){
-          //  console.log("hello");
-
             data = JSON.parse(this.response);
             console.log(data);
         };
@@ -93,30 +91,27 @@
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
-                var number_of_rows = data.length;
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
-                for(k in data){
+            var number_of_rows = data.length;
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
+            for(k in data){
 
-                    table_body+='<tr>';
-                    table_body +='<td>';
-                    table_body +=data[k]["carrier_name"] + '</br>';
-                    console.log(data[k]["carrier_name"]);
-                    table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_code"] + '">view details</a>';
-                    table_body +='</td>';
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body +=data[k]["carrier_name"] + '</br>';
+                table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_code"] + '">view details</a>';
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["carrier_code"];
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["carrier_code"];
+                table_body +='</td>';
 
+                table_body+='</tr>';
 
-                    table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
-
+            }
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
+            //display data..........
 
 // for search function.................................. only............................
             $("#search").on("keyup", function() {
@@ -133,7 +128,7 @@
 </head>
 <body background="images/intro2.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-        <input type="text" id="search" placeholder="Search data here....."></input>
+    <input type="text" id="search" placeholder="Search data here....."></input>
     <div id="tableDiv" style="margin-top: 40px">
 
     </div>

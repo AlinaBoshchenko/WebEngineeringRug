@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Minutes Delayed Statistics</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         .isa_info, .isa_success, .isa_warning, .isa_error {
@@ -89,11 +89,8 @@
         var showData = new XMLHttpRequest();
         var data;
 
-        console.log("hiii");
         showData.open('GET',"{!!  URL::route('api_get_minute_delay', ['airport_code'=>$data['airport_code'],'month' =>$data['month'], 'year' => $data['year'], 'reasons' => $data['reasons']]) !!} ");
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -112,43 +109,40 @@
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Carrier code</th><th>Airport</th><th>Date</th><th>Late aircraft</th><th>Carrier</th><th>Total</th></tr></thead><tbody>';
-                for(k in data){
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Carrier code</th><th>Airport</th><th>Date</th><th>Late aircraft</th><th>Carrier</th><th>Total</th></tr></thead><tbody>';
+            for(k in data){
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body +=data[k]["carrier"]["carrier_code"] + '</br>';
+                table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier"]["carrier_code"] + '">view details</a>';
+                table_body +='</td>';
 
-                    table_body+='<tr>';
-                    table_body +='<td>';
-                    table_body +=data[k]["carrier"]["carrier_code"] + '</br>';
-                    table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier"]["carrier_code"] + '">view details</a>';
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["airport_code"];
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["airport_code"];
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["month"] + ' / ' + data[k]["year"];
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["month"] + ' / ' + data[k]["year"];
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["reasons"]["late_aircraft"];
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["reasons"]["late_aircraft"];
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["reasons"]["carrier"];
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["reasons"]["carrier"];
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["reasons"]["total"];
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["reasons"]["total"];
-                    table_body +='</td>';
+                table_body+='</tr>';
 
-                    table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
-// for search function.................................. only............................
+            }
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
         });
 
     </script>

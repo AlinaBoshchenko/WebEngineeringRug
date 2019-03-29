@@ -77,13 +77,9 @@
 
         var showData = new XMLHttpRequest();
         var data;
-        {{--       console.log("{{$data["carrier_code"]}}");--}}
-        {{--showData.open('GET', 'http://localhost:8000/API/carrier/{{$data["carrier_code"]}}',true);--}}
         showData.open('GET', '{{URL::route('api_get_airports', $data['airport_code'])}}',true);
 
         showData.onload = function(){
-            // console.log("hello");
-
             data = JSON.parse(this.response);
             console.log(data);
 
@@ -92,70 +88,53 @@
 
         var showData2 = new XMLHttpRequest();
         var data2;
-        {{--       console.log("{{$data["carrier_code"]}}");--}}
-        {{--showData.open('GET', 'http://localhost:8000/API/carrier/{{$data["carrier_code"]}}',true);--}}
         showData2.open('GET', '{{URL::route('carriers_from_airport', $data['airport_code'])}}',true);
 
 
         showData2.onload = function(){
-            // console.log("hello");
-
             data2 = JSON.parse(this.response);
-            console.log(data2);
-
         };
         showData2.send();
-
-
-
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
 
-                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
+            var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
 
 
+            table_body+='<tr>';
+            table_body +='<td>';
+            table_body += data["airport_name"];
+            table_body +='</td>';
+
+            table_body +='<td>';
+            table_body +=data["airport_code"];
+            table_body +='</td>';
+
+            table_body+='</tr>';
+            table_body+='</tbody></table>';
+
+            table_body += '<table width="100%"><thead><tr><th colspan="2">Carriers</th></tr></thead><tbody>';
+
+            var k =0;
+            for(k in data2){
                 table_body+='<tr>';
                 table_body +='<td>';
-                table_body += data["airport_name"];
+                table_body +=data2[k]["carrier_name"] + '</br>';
+                table_body += '<a href="http://localhost:8000/carriers/' + data2[k]["carrier_code"] + '">view details</a>';
                 table_body +='</td>';
 
                 table_body +='<td>';
-                table_body +=data["airport_code"];
+                table_body +=data2[k]["carrier_code"];
                 table_body +='</td>';
 
-
                 table_body+='</tr>';
-                table_body+='</tbody></table>';
 
-                table_body += '<table width="100%"><thead><tr><th colspan="2">Carriers</th></tr></thead><tbody>';
+            }
+            table_body+='</tbody></table>';
 
-                var k =0;
-                for(k in data2){
-
-                    table_body+='<tr>';
-                    table_body +='<td>';
-                    table_body +=data2[k]["carrier_name"] + '</br>';
-                    table_body += '<a href="http://localhost:8000/carriers/' + data2[k]["carrier_code"] + '">view details</a>';
-                    table_body +='</td>';
-
-                    table_body +='<td>';
-                    table_body +=data2[k]["carrier_code"];
-                    table_body +='</td>';
-
-
-                    table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-
-
-                $('#tableDiv').html(table_body);
-
-
-                //display data..........
-
+            $('#tableDiv').html(table_body);
         });
     </script>
 </head>

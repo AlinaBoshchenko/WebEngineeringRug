@@ -73,16 +73,11 @@
 
     </style>
     <script >
-        //JSON Object................
-
         var showData = new XMLHttpRequest();
         var data;
-        console.log("hiii");
         showData.open('GET', 'http://localhost:8000/API/airports',true);
 
         showData.onload = function(){
-            console.log("hello");
-
             data = JSON.parse(this.response);
             console.log(data);
         };
@@ -92,31 +87,25 @@
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
 
-                var number_of_rows = data.length;
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
-                for(k in data){
+            var number_of_rows = data.length;
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
+            for(k in data){
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body +=data[k]["airport_name"] + '</br>';
+                table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_code"] + '">view details</a>';
+                table_body +='</td>';
 
-                        table_body+='<tr>';
-                        table_body +='<td>';
-                        table_body +=data[k]["airport_name"] + '</br>';
-                        table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_code"] + '">view details</a>';
-                        table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["airport_code"];
+                table_body +='</td>';
 
-                        table_body +='<td>';
-                        table_body +=data[k]["airport_code"];
-                        table_body +='</td>';
+                table_body+='</tr>';
+            }
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
 
-
-                        table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
-
-
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {
@@ -132,7 +121,7 @@
 <body background="images/intro1.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <input type="text" id="search" placeholder="Search data here....."></input>
-    <div id="tableDiv" style="margin-top: 40px>
+    <div id="tableDiv" style="margin-top: 40px">
         Table will be generated here.
     </div>
 </div>

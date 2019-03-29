@@ -99,14 +99,12 @@
 <body background="/images/more3.jpg">
 
 <div class="form-style-6">
-
     <form method="GET" action="/reviews/{user_name}/{review_id}">
         <input type="text" name="user_name" placeholder="Type User name here" />
         <input type="text" name="review_id" placeholder="Type review ID here" />
         <input type="submit" value="Find" />
     </form>
 </div>
-
 
 </body>
 </html>

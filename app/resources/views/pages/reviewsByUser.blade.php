@@ -86,12 +86,9 @@
 
         var showData = new XMLHttpRequest();
         var data;
-        console.log("hiii");
         showData.open('GET', '{{URL::route('api_get_reviews', $data['user_name'])}}',true);
 
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -114,7 +111,6 @@
                 var k = 0;
                 var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Review</th><th>Carrier #1</th><th>Carrier #2</th><th>Carrier #3</th><th>Time</th></tr></thead><tbody>';
                 for(k in data){
-
                     table_body+='<tr>';
                     table_body +='<td>';
                     table_body +=data[k]["user_name"];
@@ -145,10 +141,7 @@
                 }
                 table_body+='</tbody></table>';
                 $('#tableDiv').html(table_body);
-                //display data..........
 
-
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {
@@ -165,7 +158,7 @@
 <div class="isa_info" id = "p1"></div>
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
     <input type="text" id="search" placeholder="Search data here....."></input>
-    <div id="tableDiv" style="margin-top: 40px>
+    <div id="tableDiv" style="margin-top: 40px">
         Table will be generated here.
     </div>
 </div>

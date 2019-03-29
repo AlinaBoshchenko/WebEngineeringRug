@@ -89,12 +89,9 @@
         var showData = new XMLHttpRequest();
         var data;
 
-        console.log("hiii");
         showData.open('GET',"{!!  URL::route('api_get_number_of_delays_ranking', ['rating_type'=>"ratio_of_cancellations", 'year'=>$data['year']]) !!} ");
 
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -113,35 +110,31 @@
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Rank</th><th>Carrier</th><th>Ratio of ' +
-                    'cancellations</th></tr></thead><tbody>';
-                for(k in data){
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Rank</th><th>Carrier</th><th>Ratio of ' +
+                'cancellations</th></tr></thead><tbody>';
+            for(k in data){
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body +=data[k]["rank"];
+                table_body +='</td>';
 
-                    table_body+='<tr>';
-                    table_body +='<td>';
-                    table_body +=data[k]["rank"];
-                    table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["carrier_code"] + '</br>';
+                table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_code"] + '">view details</a>';
+                table_body +='</td>';
 
-                    table_body +='<td>';
-                    table_body +=data[k]["carrier_code"] + '</br>';
-                    table_body += '<a href="http://localhost:8000/carriers/' + data[k]["carrier_code"] + '">view details</a>';
-                    table_body +='</td>';
-
-                    table_body +='<td>';
-                    table_body +=data[k]["ratio_of_cancellations"];
-                    table_body +='</td>';
-
-
-                    table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
+                table_body +='<td>';
+                table_body +=data[k]["ratio_of_cancellations"];
+                table_body +='</td>';
 
 
-// for search function.................................. only............................
+                table_body+='</tr>';
+
+            }
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
+
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {

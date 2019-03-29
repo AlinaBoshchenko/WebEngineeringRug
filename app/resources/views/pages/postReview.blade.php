@@ -97,7 +97,6 @@
         window.addEventListener("load", function () {
             function sendData() {
                 var XHR = new XMLHttpRequest();
-
                 var FD = new FormData(form);
 
                 // Define what happens on successful data submission

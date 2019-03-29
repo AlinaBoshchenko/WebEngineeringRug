@@ -98,7 +98,6 @@
         $(document).ready(function() {
             $('#MyButton').click(function (form) {
                 var XHR = new XMLHttpRequest();
-
                 var form = document.getElementById("myForm");
 
                 // Bind the FormData object and the form element
@@ -126,10 +125,6 @@
                 XHR.send(FD);
             });
         });
-
-        // Access the form element...
-
-
     </script>
 </head>
 
@@ -151,8 +146,6 @@
 
         <input type="button" value="Post" id="MyButton" >
     </form>
-
-
 </div>
 
 

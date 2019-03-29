@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Minute Statistics</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style type="text/css">
         .form-style-6{
@@ -100,7 +100,6 @@
 <div class="form-style-6">
     <h1>Find statistics in minutes</h1>
     <form method="GET" action="http://localhost:8000/carriers/statistics/minutes_delayed">
-
 
         <input type="text" name="airport_code" placeholder="Airport" />
         <input type="text" name="month" placeholder="Month" />

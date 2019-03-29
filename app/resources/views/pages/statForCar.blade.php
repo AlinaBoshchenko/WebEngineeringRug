@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Statistics for Carriers</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         .isa_info, .isa_success, .isa_warning, .isa_error {
@@ -89,12 +89,9 @@
         var showData = new XMLHttpRequest();
         var data;
 
-        console.log("hiii");
         showData.open('GET',"{!!  URL::route('api_specific_carrier_delayed_statistics', ['carrier_code'=>$data['carrier_code'],'airport1' =>$data['airport1'], 'airport2' => $data['airport2']]) !!} ");
 
         showData.onload = function(){
-            console.log("hello");
-
             data = [];
             if (this.status == 404) {
                 $('#p1').html("Invalid input in form.");
@@ -113,40 +110,36 @@
         //JSON Object End................
         //Create table and fetch data from JSON Object.
         window.addEventListener("load", function (){
-                var number_of_rows = data.length;
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Airport1</th><th>Airport2</th><th>Mean</th><th>Median</th><th>Standard deviation</th></tr></thead><tbody>';
+            var number_of_rows = data.length;
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Airport1</th><th>Airport2</th><th>Mean</th><th>Median</th><th>Standard deviation</th></tr></thead><tbody>';
 
+            table_body+='<tr>';
 
-                table_body+='<tr>';
+            table_body +='<td>';
+            table_body +=data["airport1"]["airport_name"];
+            table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["airport1"]["airport_name"];
-                table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data["airport2"]["airport_name"];
+            table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["airport2"]["airport_name"];
-                table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data["mean"];
+            table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["mean"];
-                table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data["median"];
+            table_body +='</td>';
 
-                table_body +='<td>';
-                table_body +=data["median"];
-                table_body +='</td>';
+            table_body +='<td>';
+            table_body +=data["standard_deviation"];
+            table_body +='</td>';
+            table_body+='</tr>';
 
-                table_body +='<td>';
-                table_body +=data["standard_deviation"];
-                table_body +='</td>';
-                table_body+='</tr>';
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
 
-
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
-
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {

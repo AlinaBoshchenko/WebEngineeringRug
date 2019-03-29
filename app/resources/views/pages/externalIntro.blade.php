@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>External API</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style type="text/css">
         .form-style-6{
@@ -20,8 +20,6 @@
             text-align: center;
             color: #fff;
             margin: -16px -16px 16px -16px;
-
-
         }
         .form-style-6 input[type="text"],
         .form-style-6 input[type="date"],

@@ -1,5 +1,5 @@
 <html>
-<title>Front Page</title>
+<title>US airports database</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -60,7 +60,7 @@
 <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
 
     <div class="w3-panel">
-        <h1><b>Beautiful US airports database</b></h1>
+        <h1><b>US airports database</b></h1>
     </div>
 
     <!-- Slideshow -->
@@ -115,12 +115,13 @@
 
         <div class="w3-col l3 m6 w3-grey w3-container w3-padding-16">
             <h3><a href = "http://localhost:8000/statistics/carrier">Carriers statistics</a></h3>
-            <p>Planning a trip? Have a look at the statistics of carriers. Includes mean, median and standart deviation</p>
+            <p>Planning a trip? Have a look at the statistics of carriers. Includes mean, median and standard
+                deviation</p>
         </div>
 
         <div class="w3-col l3 m6 w3-dark-grey w3-container w3-padding-16">
             <h3><a href = "http://localhost:8000/statistics">Airports statistics</a></h3>
-            <p>Get statistics about flights between two airports.Includes mean, median and standart deviation</p>
+            <p>Get statistics about flights between two airports.Includes mean, median and standard deviation</p>
         </div>
         <div class="w3-col l3 m6 w3-black w3-container w3-padding-16">
             <h3><a href = "http://localhost:8000/statistics/minutes_delayed">Statistics in minutes</a></h3>
