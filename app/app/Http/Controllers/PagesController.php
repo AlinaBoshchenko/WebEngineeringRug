@@ -347,6 +347,25 @@ class PagesController extends Controller
         return view('pages.getReviews');
     }
 
+    /**
+     * Returns page with review by user and review id
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function getByIdPage(Request $request)
+    {
+        $user_name = $request['user_name'];
+        $review_id = $request['review_id'];
+
+        $data = [
+            'user_name' => $user_name,
+            'review_id' => $review_id
+        ];
+
+        return view('pages.reviewsById')->withData($data);
+    }
+
     /**Returns page with form to get review by user and review id
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -375,23 +394,6 @@ class PagesController extends Controller
         return view('pages.reviewsByUser')->withData($data);
     }
 
-    /**
-     * Returns page with review by user and review id
-     *
-     * @param Request $request
-     * @return mixed
-     */
-    public function getByIdPage(Request $request)
-    {
-        $user_name = $request['user_name'];
-        $review_id = $request['review_id'];
 
-        $data = [
-            'user_name' => $user_name,
-            'review_id' => $review_id
-        ];
-
-        return view('pages.reviewsById')->withData($data);
-    }
 
 }
