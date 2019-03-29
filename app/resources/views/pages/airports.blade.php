@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Table</title>
+    <title>Airports</title>
     <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         h2 {
@@ -25,6 +25,7 @@
             font-weight: 100%;
             line-height: 1.42em;
             color: #FFFFFF;
+            background-size: 100%;
 
         }
         button{
@@ -41,7 +42,7 @@
             font-size: 15px;
         }
         table {
-            border-collapse: collapse;;
+            border-collapse: collapse;
             width: 100%;
             font-family: 'Nunito', sans-serif;
             font-weight: 100%;
@@ -72,50 +73,39 @@
 
     </style>
     <script >
-        //JSON Object................
-
         var showData = new XMLHttpRequest();
         var data;
-        console.log("hiii");
         showData.open('GET', 'http://localhost:8000/API/airports',true);
 
         showData.onload = function(){
-            console.log("hello");
-
             data = JSON.parse(this.response);
             console.log(data);
-        }
+        };
         showData.send();
 
         //JSON Object End................
         //Create table and fetch data from JSON Object.
-        $(document).ready(function(){
-            $("button").click(function(){
-                var number_of_rows = data.length;
-                var k = 0;
-                var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
-                for(k in data){
+        window.addEventListener("load", function (){
 
-                        table_body+='<tr>';
-                        table_body +='<td>';
-                        table_body +=data[k]["airport_name"] + '</br>';
-                         table_body += '<a href="' + data[k]["link"] + '">view details</a>';
-                        table_body +='</td>';
+            var number_of_rows = data.length;
+            var k = 0;
+            var table_body = '<table width="100%"><thead><tr><th>Name</th><th>Code</th></tr></thead><tbody>';
+            for(k in data){
+                table_body+='<tr>';
+                table_body +='<td>';
+                table_body +=data[k]["airport_name"] + '</br>';
+                table_body += '<a href="http://localhost:8000/airports/' + data[k]["airport_code"] + '">view details</a>';
+                table_body +='</td>';
 
-                        table_body +='<td>';
-                        table_body +=data[k]["airport_code"];
-                        table_body +='</td>';
+                table_body +='<td>';
+                table_body +=data[k]["airport_code"];
+                table_body +='</td>';
 
+                table_body+='</tr>';
+            }
+            table_body+='</tbody></table>';
+            $('#tableDiv').html(table_body);
 
-                        table_body+='</tr>';
-
-                }
-                table_body+='</tbody></table>';
-                $('#tableDiv').html(table_body);
-                //display data..........
-            });
-
-// for search function.................................. only............................
             $("#search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("table tr").filter(function(index) {
@@ -130,9 +120,8 @@
 </head>
 <body background="images/intro1.jpg" style="width: 1000px">
 <div style="margin-top: 50px; margin-left: 250px; margin-right: 250px;">
-    <button>Create Table</button>
     <input type="text" id="search" placeholder="Search data here....."></input>
-    <div id="tableDiv" style="margin-top: 40px>
+    <div id="tableDiv" style="margin-top: 40px">
         Table will be generated here.
     </div>
 </div>

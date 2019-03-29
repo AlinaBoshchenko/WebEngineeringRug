@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\carrier;
+use App\Carrier;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
@@ -31,7 +31,7 @@ class CarriersController extends Controller
         if ($content_body === null) {
             return response('Problem loading from airports database.', Response::HTTP_INTERNAL_SERVER_ERROR);
         } elseif (empty($content_body)) {
-            return response('Carrier code not found.', Response::HTTP_NOT_FOUND);
+            return response('Carrier code not found.', Response::HTTP_OK);
         }
 
         $content_type_requested = $request->header('Accept');
@@ -121,6 +121,13 @@ class CarriersController extends Controller
             );
         }
 
-        return $carrier->toArray();
+
+
+        return \array_merge(
+            $carrier->toArray(),
+            [
+                'statistics_link' => URL::route('api_specific_carrier_delayed_statistics', $carrier->carrier_code)
+            ]
+        );
     }
 }

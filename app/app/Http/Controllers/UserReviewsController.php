@@ -41,11 +41,32 @@ class UserReviewsController extends Controller
         if ($content_type_requested == 'text/csv') {
             $callback = function () use ($content_body) {
                 $FH = fopen('php://output', 'w');
-                foreach ($content_body as $row) {
-                    if (!\is_array($row)) {
-                        $row = [$row];
+
+                foreach ($content_body as $idx => $row) {
+                    $string = [
+                        'user_name' => $row['user_name'],
+                        'review' => $row['reviews'],
+                        'carrier_code_rank_1' => $row['carrier_code_rank_1'],
+                        'carrier_code_rank_2' => $row['carrier_code_rank_2'],
+                        'carrier_code_rank_3' => $row['carrier_code_rank_3'],
+                    ];
+
+                    if($row['timestamp']){
+                        foreach ($row['timestamp'] as $key => $timestamp){
+                            $string[$key] = $timestamp;
+                        }
                     }
-                    fputcsv($FH, $row);
+
+                    if($row['link']){
+                        $string['link'] = $row['link'];
+                    }
+
+                    if ($idx == 0) {
+                        fputcsv($FH, \array_keys($string));
+                    }
+
+                    fputcsv($FH, $string);
+
                 }
                 fclose($FH);
             };
@@ -62,12 +83,12 @@ class UserReviewsController extends Controller
 
     /**
      * @param Request $request
-     * @param string $user_name
      *
      * @return Response
      */
-    public function post(Request $request, string $user_name)
+    public function post(Request $request)
     {
+        $user_name = $request['user_name'] ?? null;
         $review = $request['review'] ?? null;
         $carrier_code_rank_1 = $request['carrier_code_rank_1'] ?? null;
         $carrier_code_rank_2 = $request['carrier_code_rank_2'] ?? null;
@@ -102,6 +123,26 @@ class UserReviewsController extends Controller
         }
     }
 
+
+    /**
+     * @param string $user_name
+     * @param int $id
+     *
+     * @return array|null
+     */
+    private function getReviewWithGivenID(string $user_name, int $id){
+        try{
+            $review = UserReviews::where('id' , '=' , $id)->first();
+            if($review && $review->user_name == $user_name){
+                return [$review];
+            }else{
+                return null;
+            }
+        } catch (\Exception $exception){
+            return null;
+        }
+    }
+
     /**
      * @param string $user_name
      *
@@ -130,24 +171,5 @@ class UserReviewsController extends Controller
         }
 
         return $reviews_as_array;
-    }
-
-    /**
-     * @param string $user_name
-     * @param int    $id
-     *
-     * @return UserReviews|null
-     */
-    private function getReviewWithGivenID(string $user_name, int $id){
-        try{
-            $review = UserReviews::where('id' , '=' , $id)->first();
-            if($review && $review->user_name == $user_name){
-                return $review;
-            }else{
-                return null;
-            }
-        } catch (\Exception $exception){
-            return null;
-        }
     }
 }
